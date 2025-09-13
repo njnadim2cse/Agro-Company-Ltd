@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_gatepass_approval_wizard_form" model="ir.ui.view">
+        <field name="name">gatepass.approval.wizard.form</field>
+        <field name="model">gatepass.approval.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Gate Pass Approval">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="gatepass_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="approval_notes" placeholder="Enter approval or rejection notes..." nolabel="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_approve" string="Approve" type="object" class="btn-primary"/>
+                    <button name="action_reject" string="Reject" type="object" class="btn-secondary"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <act_window id="action_gatepass_approval_wizard"
+                name="Approve/Reject Gate Pass"
+                res_model="gatepass.approval.wizard"
+                view_mode="form"
+                target="new"
+                context="{'default_gatepass_id': active_id}"/>
+</odoo>

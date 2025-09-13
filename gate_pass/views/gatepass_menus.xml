@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Main Menu -->
+    <menuitem id="menu_gatepass_main" name="Gate Pass" sequence="10"/>
+    
+    <!-- Sub Menus -->
+    <menuitem id="menu_gatepass_all" name="All Passes" parent="menu_gatepass_main" action="action_gatepass" sequence="10"/>
+    <menuitem id="menu_gatepass_approval" name="Approval Dashboard" parent="menu_gatepass_main" action="action_gatepass_approval" sequence="20" />
+    
+    <!-- Configuration Menu (hidden for regular users) -->
+    <menuitem id="menu_gatepass_config" name="Gate Pass Configuration" parent="menu_gatepass_main" sequence="100" groups="base.group_system"/>
+</odoo>

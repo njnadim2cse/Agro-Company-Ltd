@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  
+    <record id="view_users_form_security" model="ir.ui.view">
+        <field name="name">res.users.form.security</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='company_id']" position="after">
+                <group string="Gate Pass Security Access">
+                    <field name="is_gate_staff"/>
+                    <field name="is_head_office"/>
+                    <field name="is_security_admin"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

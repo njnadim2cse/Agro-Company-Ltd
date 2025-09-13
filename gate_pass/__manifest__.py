@@ -1,0 +1,22 @@
+{
+    'name': 'Gate Pass Management',
+    'version': '1.0',
+    'summary': 'Manage vehicle and visitor gate passes with approval workflow',
+    'category': 'Operations',
+    'author': 'Your Company',
+    'website': 'https://www.yourcompany.com',
+    'depends': ['base', 'mail', 'sale', 'stock'],
+    'data': [
+        'security/ir.model.access.csv',
+        'data/gatepass_sequence.xml',
+     
+        'views/gatepass_people_views.xml',
+        'views/gatepass_views.xml',
+        'views/gatepass_menus.xml',
+        'wizard/gatepass_approval.xml',
+        'views/res_users_views.xml',
+    ],
+    'installable': True,
+    'application': True,
+    'license': 'LGPL-3',
+}

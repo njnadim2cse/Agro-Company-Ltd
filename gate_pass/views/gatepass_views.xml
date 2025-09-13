@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Gate Pass Form View -->
+    <record id="view_gatepass_form" model="ir.ui.view">
+        <field name="name">gatepass.gatepass.form</field>
+        <field name="model">gatepass.gatepass</field>
+        <field name="arch" type="xml">
+            <form string="Gate Pass" >
+                <header>
+                    <button name="action_send_for_approval" string="Send for Approval" type="object" class="btn-primary" />
+                    <button name="action_approve" string="Approve" type="object" class="btn-primary" />
+                    <button name="action_reject" string="Reject" type="object" class="btn-secondary" />
+                    <button name="action_mark_in" string="Mark Entry" type="object" class="btn-primary" />
+                    <button name="action_mark_out" string="Mark Exit" type="object" class="btn-primary"/>
+                    <button name="action_complete" string="Complete" type="object" class="btn-primary" />
+                    <field name="state" widget="statusbar"  clickable="true"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="request_type" widget="radio" options="{'horizontal': true}"/>
+                            <field name="state" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="gate_number" required="1"/>
+                            <field name="purpose" required="1"/>
+                            <field name="people_count" required="1"/>
+                        </group>
+                    </group>
+                    
+                    <notebook>
+                        <page string="Details">
+                            <group invisible="request_type != 'vehicle'">
+                                <separator string="Vehicle Information"/>
+                                <field name="vehicle_number"/>
+                                <field name="vehicle_type"/>
+                            </group>
+                            <group invisible="request_type != 'visitor'">
+                                <separator string="Visitor Information"/>
+                                <field name="visitor_purpose" placeholder="Detailed purpose of visit..." nolabel="1"/>
+                            </group>
+                        </page>
+                        <page string="People">
+                            <field name="people_count" widget="handle"/>
+                            <field name="people_ids" context="{'default_gatepass_id': id}">
+                                <list editable="bottom" string="People">
+                                    <field name="name"/>
+                                    <field name="id_type"/>
+                                    <field name="id_number"/>
+                                    <field name="mobile"/>
+                                </list>
+                                <list editable="bottom" string="Visitors" >
+                                    <field name="name"/>
+                                    <field name="id_type"/>
+                                    <field name="id_number"/>
+                                    <field name="mobile"/>
+                                </list>
+                                <form>
+                                    <group>
+                                        <field name="name"/>
+                                        <field name="id_type"/>
+                                        <field name="id_number"/>
+                                        <field name="mobile"/>
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                        
+                        <page string="Photos">
+                            <group>
+                                <group string="Entry Photo">
+                                    <field name="entry_photo" widget="image" class="oe_avatar" filename="entry_photo_filename"
+                                        options="{'preview_image': 'entry_photo', 'size': [1024, 768]}"
+                                       />
+                                    <div class="text-muted text-center mt-2">
+                                        <small>Click on the image to capture or upload entry photo</small>
+                                    </div>
+                                </group>
+                                <group string="Exit Photo">
+                                    <field name="exit_photo" widget="image" class="oe_avatar" filename="exit_photo_filename"
+                                        options="{'preview_image': 'exit_photo', 'size': [1024, 768]}"
+                                      />
+                                    <div class="text-muted text-center mt-2" >
+                                        <small>Click on the image to capture or upload exit photo</small>
+                                    </div>
+                                </group>
+                            </group>
+                        </page>
+                        
+                        <page string="Additional Info">
+                            <group>
+                                <field name="notes" placeholder="Additional notes..." nolabel="1"/>
+                                <field name="sale_order_id"/>
+                                <field name="delivery_order_id"/>
+                                <field name="requested_by" readonly="1"/>
+                                <field name="approved_by" readonly="1"/>
+                                <field name="approval_date" readonly="1"/>
+                                <field name="entry_time" readonly="1"/>
+                                <field name="exit_time" readonly="1"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Gate Pass list View -->
+    <record id="view_gatepass_list" model="ir.ui.view">
+        <field name="name">gatepass.gatepass.list</field>
+        <field name="model">gatepass.gatepass</field>
+        <field name="arch" type="xml">
+            <list string="Gate Passes">
+            <field name="name"/>
+            <field name="request_type"/>
+            <!-- <field name="state" widget="statusbar" clickable="false"/> -->
+            <field name="gate_number"/>
+            <field name="vehicle_number"/>
+            <field name="people_count"/>
+            <field name="entry_time"/>
+        </list>
+
+        </field>
+    </record>
+
+ 
+
+
+    <!-- Gate Pass Search View -->
+    <record id="view_gatepass_search" model="ir.ui.view">
+        <field name="name">gatepass.gatepass.search</field>
+        <field name="model">gatepass.gatepass</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="request_type"/>
+                <field name="state"/>
+                <field name="gate_number"/>
+                <field name="vehicle_number"/>
+                <filter string="Today's Entries" name="today_entries" domain="[('entry_time', '>=', context_today().strftime('%Y-%m-%d 00:00:00'))]"/>
+                <filter string="Pending Approval" name="pending_approval" domain="[('state', '=', 'sent')]"/>
+                <filter string="My Requests" name="my_requests" domain="[('requested_by', '=', uid)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Request Type" name="group_by_type" context="{'group_by': 'request_type'}"/>
+                    <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
+                    <filter string="Gate" name="group_by_gate" context="{'group_by': 'gate_number'}"/>
+                    <filter string="Purpose" name="group_by_purpose" context="{'group_by': 'purpose'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_gatepass" model="ir.actions.act_window">
+        <field name="name">Gate Passes</field>
+        <field name="res_model">gatepass.gatepass</field>
+        <field name="view_mode">list,form</field>
+        <!-- <field name="view_id" ref="view_gatepass_list"/> -->
+        <field name="search_view_id" ref="view_gatepass_search"/>
+       
+    </record>
+
+    <!-- Head Office Approval Dashboard -->
+    <record id="action_gatepass_approval" model="ir.actions.act_window">
+        <field name="name">Approval Dashboard</field>
+        <field name="res_model">gatepass.gatepass</field>
+        <field name="view_mode">kanban,list,form</field>
+        <!-- <field name="view_id" ref="view_gatepass_list"/> -->
+        <field name="search_view_id" ref="view_gatepass_search"/>
+       
+    </record>
+
+    <!-- Kanban View for Approval Dashboard -->
+    <record id="view_gatepass_kanban" model="ir.ui.view">
+        <field name="name">gatepass.gatepass.kanban</field>
+        <field name="model">gatepass.gatepass</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state">
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div class="o_kanban_record_title">
+                                <field name="name"/>
+                            </div>
+                            <div>
+                                <field name="request_type"/>
+                                <field name="gate_number"/>
+                            </div>
+                            <div t-if="record.vehicle_number.raw_value">
+                                Vehicle: <field name="vehicle_number"/>
+                            </div>
+                            <div>
+                                People: <field name="people_count"/>
+                            </div>
+                            <div>
+                                <field name="state" widget="statusbar" />
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+</odoo>
