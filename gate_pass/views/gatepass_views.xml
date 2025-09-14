@@ -7,13 +7,31 @@
         <field name="arch" type="xml">
             <form string="Gate Pass" >
                 <header>
-                    <button name="action_send_for_approval" string="Send for Approval" type="object" class="btn-primary" />
-                    <button name="action_approve" string="Approve" type="object" class="btn-primary" />
-                    <button name="action_reject" string="Reject" type="object" class="btn-secondary" />
-                    <button name="action_mark_in" string="Mark Entry" type="object" class="btn-primary" />
-                    <button name="action_mark_out" string="Mark Exit" type="object" class="btn-primary"/>
-                    <button name="action_complete" string="Complete" type="object" class="btn-primary" />
-                    <field name="state" widget="statusbar"  clickable="true"/>
+                    <!-- Gate Staff & Admin: Send for Approval (draft state only) -->
+                    <button name="action_send_for_approval" string="Send for Approval" type="object" class="btn-primary" 
+                            invisible="not (state == 'draft' and (user_is_gate_staff or user_is_security_admin))"/>
+                    
+                    <!-- Head Office & Admin: Approve (sent state only) -->
+                    <button name="action_approve" string="Approve" type="object" class="btn-primary" 
+                            invisible="not (state == 'sent' and (user_is_head_office or user_is_security_admin))"/>
+                    
+                    <!-- Head Office & Admin: Reject (sent state only) -->
+                    <button name="action_reject" string="Reject" type="object" class="btn-secondary" 
+                            invisible="not (state == 'sent' and (user_is_head_office or user_is_security_admin))"/>
+                    
+                    <!-- Gate Staff & Admin: Mark Entry (approved state only) -->
+                    <button name="action_mark_in" string="Mark Entry" type="object" class="btn-primary" 
+                            invisible="not (state == 'approved' and (user_is_gate_staff or user_is_security_admin))"/>
+                    
+                    <!-- Gate Staff & Admin: Mark Exit (in state only) -->
+                    <button name="action_mark_out" string="Mark Exit" type="object" class="btn-primary"
+                            invisible="not (state == 'in' and (user_is_gate_staff or user_is_security_admin))"/>
+                    
+                    <!-- Gate Staff & Admin: Complete (out state only) -->
+                    <button name="action_complete" string="Complete" type="object" class="btn-primary" 
+                            invisible="not (state == 'out' and (user_is_gate_staff or user_is_security_admin))"/>
+                    
+                    <field name="state" widget="statusbar" statusbar_visible="draft,sent,approved,in,out,completed" clickable="true"/>
                 </header>
                 <sheet>
                     <group>

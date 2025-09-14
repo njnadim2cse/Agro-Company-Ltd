@@ -9,6 +9,11 @@ class GatePass(models.Model):
     _description = 'Gate Pass Management'
     _inherit = ['mail.thread', 'mail.activity.mixin']
     
+    # Add computed fields for UI visibility
+    user_is_gate_staff = fields.Boolean(string='User is Gate Staff', compute='_compute_user_access')
+    user_is_head_office = fields.Boolean(string='User is Head Office', compute='_compute_user_access')
+    user_is_security_admin = fields.Boolean(string='User is Security Admin', compute='_compute_user_access')
+
     name = fields.Char(string='Reference', required=True, copy=False, readonly=True, index=True, default=lambda self: _('New'), tracking=True)
     request_type = fields.Selection([
         ('vehicle', 'Vehicle'),
@@ -80,51 +85,18 @@ class GatePass(models.Model):
     # ========== SECURITY METHODS ==========
     def _check_gate_staff_access(self):
         """Check if current user has gate staff access"""
-        try:
-            # Check if the field exists in the database
-            if hasattr(self.env.user, 'is_gate_staff'):
-                if not self.env.user.is_gate_staff and not self.env.user.is_security_admin:
-                    raise AccessError(_("You don't have Gate Staff access rights."))
-            else:
-                # Field doesn't exist yet, allow access during development
-                _logger.warning("Gate Staff field not found, allowing access")
-        
-        except Exception as e:
-            _logger.warning("Error checking gate staff access: %s", str(e))
-            # Allow access during development
-            pass
+        if not (self.env.user.is_gate_staff or self.env.user.is_security_admin):
+            raise AccessError(_("You don't have Gate Staff access rights."))
 
     def _check_head_office_access(self):
         """Check if current user has head office access"""
-        try:
-            # Check if the field exists in the database
-            if hasattr(self.env.user, 'is_head_office'):
-                if not self.env.user.is_head_office and not self.env.user.is_security_admin:
-                    raise AccessError(_("You don't have Head Office access rights."))
-            else:
-                # Field doesn't exist yet, allow access during development
-                _logger.warning("Head Office field not found, allowing access")
-        
-        except Exception as e:
-            _logger.warning("Error checking head office access: %s", str(e))
-            # Allow access during development
-            pass
+        if not (self.env.user.is_head_office or self.env.user.is_security_admin):
+            raise AccessError(_("You don't have Head Office access rights."))
 
     def _check_security_admin_access(self):
         """Check if current user has security admin access"""
-        try:
-            # Check if the field exists in the database
-            if hasattr(self.env.user, 'is_security_admin'):
-                if not self.env.user.is_security_admin:
-                    raise AccessError(_("You don't have Security Admin access rights."))
-            else:
-                # Field doesn't exist yet, allow access during development
-                _logger.warning("Security Admin field not found, allowing access")
-        
-        except Exception as e:
-            _logger.warning("Error checking security admin access: %s", str(e))
-            # Allow access during development
-            pass
+        if not self.env.user.is_security_admin:
+            raise AccessError(_("You don't have Security Admin access rights."))
     # ========== END SECURITY METHODS ==========
     
     @api.model
@@ -155,9 +127,23 @@ class GatePass(models.Model):
                 new_people.append((0, 0, {'name': f'Person {i+1}'}))
             self.people_ids = new_people
     
+    @api.depends()
+    def _compute_user_access(self):
+        """Compute user access fields for UI visibility"""
+        for record in self:
+            try:
+                record.user_is_gate_staff = self.env.user.is_gate_staff
+                record.user_is_head_office = self.env.user.is_head_office
+                record.user_is_security_admin = self.env.user.is_security_admin
+            except:
+                # Fallback if fields don't exist yet
+                record.user_is_gate_staff = False
+                record.user_is_head_office = False
+                record.user_is_security_admin = False
+
     def action_send_for_approval(self):
         """Send gate pass for approval - Gate Staff & Admin only"""
-        self._check_gate_staff_access()  # Add this security check
+        self._check_gate_staff_access()
         
         if not self.people_ids:
             raise UserError(_('Please add people details before sending for approval.'))
@@ -167,46 +153,44 @@ class GatePass(models.Model):
         
         if self.request_type == 'visitor' and not self.visitor_purpose:
             raise UserError(_('Please enter visitor purpose details for visitor gate pass.'))
-        print('Env USER:  ',self.env.user.name)
-        user_id = self.env.user
-        if user_id.is_gate_staff:
-            self.write({'state': 'sent'})
-            self._send_approval_notification()
         
-        # Add this message post
-            self.message_post(
-                body=_('Gate pass sent for approval to Head Office'),
-                message_type='comment',
-                subtype_xmlid='mail.mt_comment'
-            )
-            return True
+        self.write({'state': 'sent'})
+        self._send_approval_notification()
+        
+        self.message_post(
+            body=_('Gate pass sent for approval to Head Office'),
+            message_type='comment',
+            subtype_xmlid='mail.mt_comment'
+        )
+        return True
     
     def _send_approval_notification(self):
         """Send approval notification to Head Office users"""
         try:
-            # Check if the field exists
-        
-            # Find Head Office users by boolean field
+            # Find Head Office users
             head_office_users = self.env['res.users'].search([
-                ('is_head_office', 'in', True),
-                ('active', 'in', True)
+                ('is_head_office', '=', True),
+                ('active', '=', True)
             ])
             
-                
-            # Fallback to security admins if no head office users found
-            # if not head_office_users:
-            #     head_office_users = self.env['res.users'].search([
-            #         ('is_security_admin', '=', True),
-            #         ('active', '=', True)
-            #     ], limit=5)
-            # else:
-            #     # Fallback to old method if fields don't exist yet
-            #     head_office_users = self.env['res.users'].search([
-            #         ('groups_id.name', 'ilike', 'Head Office'),
-            #         ('active', '=', True)
-            #     ], limit=5)
+            # Also include security admins
+            security_admin_users = self.env['res.users'].search([
+                ('is_security_admin', '=', True),
+                ('active', '=', True),
+                ('id', 'not in', head_office_users.ids)  # Avoid duplicates
+            ])
             
-            for user in head_office_users:
+            # Combine both lists
+            all_approvers = head_office_users | security_admin_users
+            
+            # Fallback if no approvers found
+            if not all_approvers:
+                all_approvers = self.env['res.users'].search([
+                    ('groups_id.name', 'ilike', 'Administrator'),
+                    ('active', '=', True)
+                ], limit=5)
+            
+            for user in all_approvers:
                 self.activity_schedule(
                     'mail.mail_activity_data_todo',
                     summary=_('Gate Pass Approval Required'),
@@ -214,21 +198,22 @@ class GatePass(models.Model):
                     user_id=user.id
                 )
                 
+            # Log notification
+            _logger.info("Approval notification sent to %s users for gate pass %s", 
+                        len(all_approvers), self.name)
+                
         except Exception as e:
-            _logger.warning("Failed to send approval notification: %s", str(e))
+            _logger.error("Failed to send approval notification: %s", str(e))
     
     def action_approve(self):
         """Approve gate pass - Head Office & Admin only"""
-        self._check_head_office_access()  # Add this security check
+        self._check_head_office_access()
         
         self.write({
             'state': 'approved',
             'approval_date': fields.Datetime.now(),
             'approved_by': self.env.user.id
         })
-        
-        # Notify gate staff
-        self._send_approval_confirmation()
         
         # Post approval message to chatter
         self.message_post(
@@ -239,20 +224,9 @@ class GatePass(models.Model):
         
         return True
     
-    def _send_approval_confirmation(self):
-        """Send approval confirmation to requester"""
-        try:
-            # Complete any pending activities for this record (SIMPLIFIED)
-            activities = self.activity_search([('res_id', '=', self.id)])
-            if activities:
-                activities.action_feedback()
-                
-        except Exception as e:
-            _logger.warning("Failed to send approval confirmation: %s", str(e))
-    
     def action_reject(self):
         """Reject gate pass - Head Office & Admin only"""
-        self._check_head_office_access()  # Add this security check
+        self._check_head_office_access()
         
         self.write({'state': 'draft'})
         
@@ -263,18 +237,19 @@ class GatePass(models.Model):
             subtype_xmlid='mail.mt_comment'
         )
         
+        # Complete any pending activities
         try:
-            # Complete any pending activities (SIMPLIFIED)
             activities = self.activity_search([('res_id', '=', self.id)])
             if activities:
                 activities.action_feedback()
         except Exception as e:
             _logger.warning("Failed to update activities on rejection: %s", str(e))
+            
         return True
     
     def action_mark_in(self):
         """Mark entry with timestamp and photo - Gate Staff & Admin only"""
-        self._check_gate_staff_access()  # Add this security check
+        self._check_gate_staff_access()
         
         if not self.entry_photo:
             raise UserError(_('Please capture entry photo before marking entry.'))
@@ -293,8 +268,8 @@ class GatePass(models.Model):
         return True
     
     def action_mark_out(self):
-        """Mark exit with timestamp and photo - Head Office & Admin only"""
-        self._check_head_office_access()  # Add this security check
+        """Mark exit with timestamp and photo - Gate Staff & Admin only"""
+        self._check_gate_staff_access()
         
         if not self.exit_photo:
             raise UserError(_('Please capture exit photo before marking exit.'))
@@ -313,8 +288,8 @@ class GatePass(models.Model):
         return True
     
     def action_complete(self):
-        """Complete the gate pass - Head Office & Admin only"""
-        self._check_head_office_access()  # Add this security check
+        """Complete the gate pass - Gate Staff & Admin only"""
+        self._check_gate_staff_access()
         
         self.write({'state': 'completed'})
         

@@ -9,7 +9,6 @@
     'data': [
         'security/ir.model.access.csv',
         'data/gatepass_sequence.xml',
-     
         'views/gatepass_people_views.xml',
         'views/gatepass_views.xml',
         'views/gatepass_menus.xml',
