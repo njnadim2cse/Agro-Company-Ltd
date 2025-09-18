@@ -1,3 +1,5 @@
 id,name,model_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_gatepass_gatepass,gatepass.gatepass,model_gatepass_gatepass,1,1,1,1
 access_gatepass_people,gatepass.people,model_gatepass_people,1,1,1,1
+access_gate_config,gatepass.gate.config,model_gatepass_gate_config,1,1,1,1
+access_purpose_config,gatepass.purpose.config,model_gatepass_purpose_config,1,1,1,1

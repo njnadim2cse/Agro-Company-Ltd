@@ -27,24 +27,13 @@ class GatePass(models.Model):
         ('approved', 'Approved'),
         ('in', 'In'),
         ('out', 'Out'),
-        ('completed', 'Completed')
-    ], string='Status', default='draft', tracking=True)
+        ('completed', 'Completed'),
+    ], string="Status", default='draft')
+
     
-    gate_number = fields.Selection([
-        ('gate1', 'Gate 1'),
-        ('gate2', 'Gate 2'),
-        ('gate3', 'Gate 3')
-    ], string='Gate Number', required=True, tracking=True)
-    
-    purpose = fields.Selection([
-        ('feed', 'Feed Delivery'),
-        ('raw_material', 'Raw Material'),
-        ('packaging', 'Packaging'),
-        ('maintenance', 'Maintenance'),
-        ('meeting', 'Meeting'),
-        ('inspection', 'Inspection'),
-        ('other', 'Other')
-    ], string='Purpose', required=True, tracking=True)
+    gate_number = fields.Selection(selection='_get_gate_numbers', string='Gate Number', required=True, tracking=True)
+    purpose_id = fields.Many2one('gatepass.purpose.config', string='Purpose', required=True)
+    # purpose = fields.Selection(selection='_get_purposes', string='Purpose', required=True, tracking=True)
     
     people_count = fields.Integer(string='People Count', default=1, tracking=True)
     notes = fields.Text(string='Notes')
@@ -81,7 +70,13 @@ class GatePass(models.Model):
     # Approval
     approved_by = fields.Many2one('res.users', string='Approved By')
     requested_by = fields.Many2one('res.users', string='Requested By', default=lambda self: self.env.user)
-    
+    main_person_id = fields.Many2one(
+        "gatepass.people",
+        string="People",
+        compute="_compute_main_person",
+        store=True
+    )
+
     # ========== SECURITY METHODS ==========
     def _check_gate_staff_access(self):
         """Check if current user has gate staff access"""
@@ -104,15 +99,6 @@ class GatePass(models.Model):
         if vals.get('name', _('New')) == _('New'):
             vals['name'] = self.env['ir.sequence'].next_by_code('gatepass.gatepass') or _('New')
         return super(GatePass, self).create(vals)
-    
-    @api.onchange('request_type')
-    def _onchange_request_type(self):
-        """Reset fields when request type changes"""
-        if self.request_type == 'vehicle':
-            self.visitor_purpose = False
-        else:
-            self.vehicle_number = False
-            self.vehicle_type = False
     
     @api.onchange('people_count')
     def _onchange_people_count(self):
@@ -300,3 +286,35 @@ class GatePass(models.Model):
             subtype_xmlid='mail.mt_comment'
         )
         return True
+    
+    @api.model
+    def _get_gate_numbers(self):
+        """Get gate numbers from configuration"""
+        try:
+            gates = self.env['gatepass.gate.config'].sudo().search([('active', '=', True)])
+            return [(gate.gate_number, f"{gate.gate_number} - {gate.name}") for gate in gates]
+        except AccessError:
+            # If user doesn't have access to config, return empty list
+            return []
+        except Exception:
+            # If model doesn't exist yet, return empty list
+            return []
+
+    @api.onchange('request_type')
+    def _onchange_request_type(self):
+        domain = [('active', '=', True)]
+        if self.request_type == 'vehicle':
+            domain.append(('assign_for', 'in', ['vehicle', 'both']))
+            self.visitor_purpose = False
+            self.purpose_id = False
+        elif self.request_type == 'visitor':
+            domain.append(('assign_for', 'in', ['visitor', 'both']))
+            self.vehicle_number = False
+            self.vehicle_type = False
+            self.purpose_id = False
+        return {'domain': {'purpose_id': domain}}
+    
+    @api.depends("people_ids")
+    def _compute_main_person(self):
+        for rec in self:
+            rec.main_person_id = rec.people_ids[:1].id if rec.people_ids else False

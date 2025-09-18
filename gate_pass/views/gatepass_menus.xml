@@ -1,12 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Main Menu -->
-    <menuitem id="menu_gatepass_main" name="Gate Pass" sequence="10"/>
-    
-    <!-- Sub Menus -->
-    <menuitem id="menu_gatepass_all" name="All Passes" parent="menu_gatepass_main" action="action_gatepass" sequence="10"/>
-    <menuitem id="menu_gatepass_approval" name="Approval Dashboard" parent="menu_gatepass_main" action="action_gatepass_approval" sequence="20" />
-    
-    <!-- Configuration Menu (hidden for regular users) -->
-    <menuitem id="menu_gatepass_config" name="Gate Pass Configuration" parent="menu_gatepass_main" sequence="100" groups="base.group_system"/>
+    <data noupdate="0">
+        <!-- Main Menu -->
+        <menuitem id="menu_gatepass_main" name="Gate Pass" sequence="10"/>
+        
+        <!-- Sub Menus -->
+        <menuitem id="menu_gatepass_all" name="All Passes" parent="menu_gatepass_main" action="action_gatepass" sequence="10"/>
+        <menuitem id="menu_gatepass_approval" name="Approval Dashboard" parent="menu_gatepass_main" action="action_gatepass_approval" sequence="20"/>
+        
+        <!-- Configuration Menu (visible only to HO and Admin) -->
+        <menuitem id="menu_gatepass_config" name="Configuration" parent="menu_gatepass_main" sequence="100"
+                  groups="base.group_user"/>
+        
+        <menuitem id="menu_gatepass_settings" name="Settings" parent="menu_gatepass_config" sequence="10"/>
+        
+        <menuitem id="menu_gatepass_gates" name="Gates" parent="menu_gatepass_settings" 
+                  action="action_gate_config" sequence="10"
+                  groups="base.group_user"/>
+        
+        <menuitem id="menu_gatepass_purposes" name="Purposes" parent="menu_gatepass_settings" 
+                  action="action_purpose_config" sequence="20"
+                  groups="base.group_user"/>
+    </data>
 </odoo>

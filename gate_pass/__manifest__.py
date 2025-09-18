@@ -9,11 +9,12 @@
     'data': [
         'security/ir.model.access.csv',
         'data/gatepass_sequence.xml',
+        'views/res_users_views.xml',
+        'views/config_views.xml',
         'views/gatepass_people_views.xml',
         'views/gatepass_views.xml',
         'views/gatepass_menus.xml',
         'wizard/gatepass_approval.xml',
-        'views/res_users_views.xml',
     ],
     'installable': True,
     'application': True,

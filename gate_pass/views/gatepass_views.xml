@@ -42,7 +42,7 @@
                         </group>
                         <group>
                             <field name="gate_number" required="1"/>
-                            <field name="purpose" required="1"/>
+                            <field name="purpose_id" required="1" domain="[('active','=',True),('assign_for','in', (request_type == 'vehicle') and ['vehicle','both'] or ['visitor','both'])]"/>
                             <field name="people_count" required="1"/>
                         </group>
                     </group>
@@ -62,13 +62,7 @@
                         <page string="People">
                             <field name="people_count" widget="handle"/>
                             <field name="people_ids" context="{'default_gatepass_id': id}">
-                                <list editable="bottom" string="People">
-                                    <field name="name"/>
-                                    <field name="id_type"/>
-                                    <field name="id_number"/>
-                                    <field name="mobile"/>
-                                </list>
-                                <list editable="bottom" string="Visitors" >
+                                <list editable="bottom">
                                     <field name="name"/>
                                     <field name="id_type"/>
                                     <field name="id_number"/>
@@ -131,20 +125,31 @@
         <field name="model">gatepass.gatepass</field>
         <field name="arch" type="xml">
             <list string="Gate Passes">
-            <field name="name"/>
-            <field name="request_type"/>
-            <!-- <field name="state" widget="statusbar" clickable="false"/> -->
-            <field name="gate_number"/>
-            <field name="vehicle_number"/>
-            <field name="people_count"/>
-            <field name="entry_time"/>
-        </list>
-
+                <field name="name"/>
+                <field name="request_type"/>
+                <field name="state"
+                        widget="badge"
+                       options='{"colors": {
+                           "draft": "secondary",
+                           "sent": "info",
+                           "approved": "success",
+                           "in": "primary",
+                           "out": "warning",
+                           "completed": "dark"
+                       }}'
+                       decoration-muted="state=='draft'"
+                       decoration-info="state=='sent'"
+                       decoration-success="state=='approved'"
+                       decoration-primary="state=='in'"
+                       decoration-warning="state=='out'"
+                       decoration-danger="state=='completed'"/>
+                <field name="gate_number"/>
+                <field name="vehicle_number"/>
+                <field name="people_count"/>
+                <field name="entry_time"/>
+            </list>
         </field>
     </record>
-
- 
-
 
     <!-- Gate Pass Search View -->
     <record id="view_gatepass_search" model="ir.ui.view">
@@ -157,14 +162,16 @@
                 <field name="state"/>
                 <field name="gate_number"/>
                 <field name="vehicle_number"/>
+                
                 <filter string="Today's Entries" name="today_entries" domain="[('entry_time', '>=', context_today().strftime('%Y-%m-%d 00:00:00'))]"/>
                 <filter string="Pending Approval" name="pending_approval" domain="[('state', '=', 'sent')]"/>
                 <filter string="My Requests" name="my_requests" domain="[('requested_by', '=', uid)]"/>
+
                 <group expand="0" string="Group By">
                     <filter string="Request Type" name="group_by_type" context="{'group_by': 'request_type'}"/>
                     <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
                     <filter string="Gate" name="group_by_gate" context="{'group_by': 'gate_number'}"/>
-                    <filter string="Purpose" name="group_by_purpose" context="{'group_by': 'purpose'}"/>
+                    <filter string="Purpose" name="group_by_purpose" context="{'group_by': 'purpose_id'}"/>
                 </group>
             </search>
         </field>

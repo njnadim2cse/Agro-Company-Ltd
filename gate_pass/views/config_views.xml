@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <!-- Gate Configuration list View -->
+        <record id="view_gate_config_list" model="ir.ui.view">
+            <field name="name">gatepass.gate.config.list</field>
+            <field name="model">gatepass.gate.config</field>
+            <field name="arch" type="xml">
+                <list string="Gates">
+                    <field name="gate_number"/>
+                    <field name="name" string="Gate Name"/>
+                    <field name="location" string="Gate Location"/>
+                    <field name="gate_incharge_ids" widget="many2many_tags"/>
+                    <field name="active"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Gate Configuration Form View -->
+        <record id="view_gate_config_form" model="ir.ui.view">
+            <field name="name">gatepass.gate.config.form</field>
+            <field name="model">gatepass.gate.config</field>
+            <field name="arch" type="xml">
+                <form string="Gate Configuration">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="gate_number" required="1"/>
+                                <field name="name" string="Gate Name" required="1"/>
+                                <field name="location" string="Gate Location" required="1"/>
+                            </group>
+                            <group>
+                                <field name="gate_incharge_ids" widget="many2many_tags"/>
+                                <field name="active"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Purpose Configuration List View -->
+        <record id="view_purpose_config_list" model="ir.ui.view">
+            <field name="name">gatepass.purpose.config.list</field>
+            <field name="model">gatepass.purpose.config</field>
+            <field name="arch" type="xml">
+                <list string="Purposes">
+                    <field name="name"/>
+                    <field name="assign_for" string="Type"/>
+                    <field name="active"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Purpose Configuration Form View -->
+        <record id="view_purpose_config_form" model="ir.ui.view">
+            <field name="name">gatepass.purpose.config.form</field>
+            <field name="model">gatepass.purpose.config</field>
+            <field name="arch" type="xml">
+                <form string="Purpose Configuration">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" required="1"/>
+                                <field name="assign_for" string="Type" required="1"/>
+                                <field name="active"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Actions -->
+        <record id="action_gate_config" model="ir.actions.act_window">
+            <field name="name">Gates</field>
+            <field name="res_model">gatepass.gate.config</field>
+            <field name="view_mode">list,form</field>
+            <field name="view_id" ref="view_gate_config_list"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first purpose configuration!
+                </p>
+            </field>
+        </record>
+
+        <record id="action_purpose_config" model="ir.actions.act_window">
+            <field name="name">Purposes</field>
+            <field name="res_model">gatepass.purpose.config</field>
+            <field name="view_mode">list,form</field>
+            <field name="view_id" ref="view_purpose_config_list"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first purpose configuration!
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>
