@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <data>
+        <record id="view_feed_details_tree" model="ir.ui.view">
+            <field name="name">feed.details.list</field>
+            <field name="model">feed.details</field>
+            <field name="arch" type="xml">
+                <list string="Feed Details" default_order="datetime desc" decoration-info="state == 'draft'" decoration-success="state == 'done'">
+                
+                    <field name="datetime" width="100"/>
+                    <field name="name" width="100"/>
+                    <field name="flock_id" width="100" invisible="state == 'draft'" string="Flock Name"/>
+                    <field name="created_by" widget="many2one_avatar_user" width="120"/>
+                     <field name="feed_time" width="100" string="Feed Intake Time"/>
+                    <field name="state"  widget="badge" decoration-success="state=='done'" decoration-warning="state=='draft'" width="120"/>
+                    <field name="feed_product_id" width="100" string="Feed Name"/>
+                    <field name="feed_kg" width="100" string="Feed Quantity (kg)"/>
+                    <field name="cumm_feed" width="100" string="Cumulative Feed"/>
+                </list>
+            </field>
+        </record>
+        <record id="view_feed_details_form" model="ir.ui.view">
+            <field name="name">feed.details.form</field>
+            <field name="model">feed.details</field>
+            <field name="arch" type="xml">
+                <form string="Feed Details">
+                    <header>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+                        <button name="action_confirm" string="Confirm" class="oe_highlight" type="object" icon="fa-check" invisible="state != 'draft'"/>
+                        <button name="action_draft" string="Return to Draft" type="object" icon="fa-undo" class="btn-secondary" invisible="state != 'done'"/>
+                    </header>
+
+                    <sheet>
+                        <group>
+                            <div>
+                              <h1>  <field name="name" readonly="1"/></h1>
+                            </div>
+                            <field name="datetime" readonly="1"/>
+                            <group string="Flock Details">
+                                <h1><field name="flock_id" placeholder="Select Flock" required="1" options="{'no_create': True}"/></h1>
+                                <field name="feed_time"/>
+                                <field name="current_bird"/>
+                                <field name="current_age_days"/>
+                            </group>
+                            <group string="Feed Details">
+                                <field name="feed_product_id" string="Feed Name"/>
+                                <field name="feed_kg"/>
+                                <field name="feed_per_bird"/>
+                                <field name="on_hand_qty"/>
+                            </group>
+                        </group>
+                        <notebook>
+                           <page string="Additional Notes">
+                               <field name="description_html" widget="html" options="{'style-inline': true}"/>
+                           </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_feed_details" model="ir.actions.act_window">
+            <field name="name">Feed Intake</field>
+            <field name="res_model">feed.details</field>
+            <field name="view_mode">list,form</field>
+            <field name="view_id" ref="view_feed_details_tree"/>
+        </record>
+
+        <!-- <menuitem id="menu_feed_details" name="Feed Details" parent="menu_layer_flock_root" action="action_feed_details" sequence="120"/> -->
+    </data>
+
+</odoo>

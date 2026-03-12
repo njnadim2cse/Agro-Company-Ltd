@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    
+
     <!-- Gate Pass Form View -->
     <record id="view_gatepass_form" model="ir.ui.view">
         <field name="name">gatepass.gatepass.form</field>
@@ -16,7 +18,7 @@
                             invisible="not (state == 'sent' and (user_is_head_office or user_is_security_admin))"/>
                     
                     <!-- Head Office & Admin: Reject (sent state only) -->
-                    <button name="action_reject" string="Reject" type="object" class="btn-secondary" 
+                    <button name="action_reject" string="Reject" type="object" class="btn-danger" 
                             invisible="not (state == 'sent' and (user_is_head_office or user_is_security_admin))"/>
                     
                     <!-- Gate Staff & Admin: Mark Entry (approved state only) -->
@@ -38,6 +40,7 @@
                         <group>
                             <field name="name" readonly="1"/>
                             <field name="request_type" widget="radio" options="{'horizontal': true}"/>
+                            <field name="order_type"/>
                             <field name="state" invisible="1"/>
                         </group>
                         <group>
@@ -48,17 +51,6 @@
                     </group>
                     
                     <notebook>
-                        <page string="Details">
-                            <group invisible="request_type != 'vehicle'">
-                                <separator string="Vehicle Information"/>
-                                <field name="vehicle_number"/>
-                                <field name="vehicle_type"/>
-                            </group>
-                            <group invisible="request_type != 'visitor'">
-                                <separator string="Visitor Information"/>
-                                <field name="visitor_purpose" placeholder="Detailed purpose of visit..." nolabel="1"/>
-                            </group>
-                        </page>
                         <page string="People">
                             <field name="people_count" widget="handle"/>
                             <field name="people_ids" context="{'default_gatepass_id': id}">
@@ -78,22 +70,47 @@
                                 </form>
                             </field>
                         </page>
-                        
+                        <page string="Vehicle Details for Order/Visitor">
+                            <group>
+                                <field name="vehicle_number"/>
+                                <field name="vehicle_type"/>
+                                <field name="detail_purpose"
+                                    widget="html"
+                                    placeholder="Detailed purpose...."
+                                    nolabel="1"/>
+                            </group>
+                        </page>
+                        <page string="Sale or Purchase Order">
+                            <group invisible="request_type != 'vehicle'">
+                                <group invisible="order_type != 'sale_order'">
+                                    <field name="partner_id"/>
+                                    <field name="sale_order_id"/>
+                                    
+                                </group>
+                                <group invisible="order_type != 'purchase_order'">
+                                    <field name="vendor_id"/>
+                                    <field name="purchase_order_id" />
+                                </group>
+                            </group>
+                            <div class="alert alert-info" invisible="request_type != 'visitor'">
+                                <strong>Note:</strong>No need to show Sale or Purchase Order for Visitor
+                            </div>
+                        </page>
                         <page string="Photos">
                             <group>
                                 <group string="Entry Photo">
-                                    <field name="entry_photo" widget="image" class="oe_avatar" filename="entry_photo_filename"
-                                        options="{'preview_image': 'entry_photo', 'size': [1024, 768]}"
-                                       />
+                                    <field name="entry_photo" widget="image" class="oe_avatar"
+                                        options="{'preview_image': 'entry_photo', 'size': [1024, 768]}"/>
+                                    <field name="entry_photo_filename" invisible="1"/>
                                     <div class="text-muted text-center mt-2">
                                         <small>Click on the image to capture or upload entry photo</small>
                                     </div>
                                 </group>
                                 <group string="Exit Photo">
-                                    <field name="exit_photo" widget="image" class="oe_avatar" filename="exit_photo_filename"
-                                        options="{'preview_image': 'exit_photo', 'size': [1024, 768]}"
-                                      />
-                                    <div class="text-muted text-center mt-2" >
+                                    <field name="exit_photo" widget="image" class="oe_avatar"
+                                        options="{'preview_image': 'exit_photo', 'size': [1024, 768]}"/>
+                                    <field name="exit_photo_filename" invisible="1"/>
+                                    <div class="text-muted text-center mt-2">
                                         <small>Click on the image to capture or upload exit photo</small>
                                     </div>
                                 </group>
@@ -102,9 +119,7 @@
                         
                         <page string="Additional Info">
                             <group>
-                                <field name="notes" placeholder="Additional notes..." nolabel="1"/>
-                                <field name="sale_order_id"/>
-                                <field name="delivery_order_id"/>
+                                <field name="notes" placeholder="Additional notes..." widget="html"/>
                                 <field name="requested_by" readonly="1"/>
                                 <field name="approved_by" readonly="1"/>
                                 <field name="approval_date" readonly="1"/>
@@ -129,28 +144,28 @@
                 <field name="request_type"/>
                 <field name="state"
                         widget="badge"
-                       options='{"colors": {
+                        options='{"colors": {
                            "draft": "secondary",
-                           "sent": "info",
-                           "approved": "success",
+                           "sent": "warning",
+                           "approved": "info",
                            "in": "primary",
-                           "out": "warning",
-                           "completed": "dark"
-                       }}'
-                       decoration-muted="state=='draft'"
-                       decoration-info="state=='sent'"
-                       decoration-success="state=='approved'"
-                       decoration-primary="state=='in'"
-                       decoration-warning="state=='out'"
-                       decoration-danger="state=='completed'"/>
+                           "out": "dark",
+                           "completed": "success"
+                        }}'
+                        decoration-muted="state=='draft'"
+                        decoration-info="state=='approved'"
+                        decoration-success="state=='completed'"
+                        decoration-primary="state=='in'"
+                        decoration-warning="state=='sent'"
+                        decoration-danger="state=='out'"/>
                 <field name="gate_number"/>
-                <field name="vehicle_number"/>
-                <field name="people_count"/>
+                <field name="purpose_id"/>
+                <field name="requested_by"/>
                 <field name="entry_time"/>
             </list>
         </field>
     </record>
-
+    
     <!-- Gate Pass Search View -->
     <record id="view_gatepass_search" model="ir.ui.view">
         <field name="name">gatepass.gatepass.search</field>
@@ -166,15 +181,33 @@
                 <filter string="Today's Entries" name="today_entries" domain="[('entry_time', '>=', context_today().strftime('%Y-%m-%d 00:00:00'))]"/>
                 <filter string="Pending Approval" name="pending_approval" domain="[('state', '=', 'sent')]"/>
                 <filter string="My Requests" name="my_requests" domain="[('requested_by', '=', uid)]"/>
+                <filter string="Completed" name="completed_filter" domain="[('state','=','completed')]"/>
 
                 <group expand="0" string="Group By">
                     <filter string="Request Type" name="group_by_type" context="{'group_by': 'request_type'}"/>
                     <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
                     <filter string="Gate" name="group_by_gate" context="{'group_by': 'gate_number'}"/>
                     <filter string="Purpose" name="group_by_purpose" context="{'group_by': 'purpose_id'}"/>
+                    <filter string="Entry Time" name="group_by_entry_time" context="{'group_by': 'entry_time'}"/>
+                    <filter string="Person" name="group_by_person" context="{'group_by': 'main_person_name'}"/>
                 </group>
             </search>
         </field>
+    </record>
+    
+    <!-- Quick Filter Actions -->
+    <record id="action_gatepass_completed" model="ir.actions.act_window">
+        <field name="name">Completed Gate Passes</field>
+        <field name="res_model">gatepass.gatepass</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state', '=', 'completed')]</field>
+    </record>
+
+    <record id="action_gatepass_pending" model="ir.actions.act_window">
+        <field name="name">Pending Gate Passes</field>
+        <field name="res_model">gatepass.gatepass</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state', '=', 'sent')]</field>
     </record>
 
     <!-- Action -->

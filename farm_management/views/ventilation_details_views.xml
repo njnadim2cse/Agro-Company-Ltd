@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="view_ventilation_farm_details_list" model="ir.ui.view">
+        <field name="name">ventilation.farm.details.list</field>
+        <field name="model">ventilation.farm.details</field>
+        <field name="arch" type="xml">
+            <list string="Ventilation Farms">
+                <field name="reference" width="150"/>
+                 <field name="target_temperature" width="100"/>
+                 <field name="created_by" widget="many2one_avatar_user" width="120"/>
+                 <field name="state"  widget="badge" decoration-success="state=='done'" decoration-warning="state=='draft'" width="120"/>
+                <field name="description" width="300"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_ventilation_farm_details_form" model="ir.ui.view">
+        <field name="name">ventilation.farm.details.form</field>
+        <field name="model">ventilation.farm.details</field>
+        <field name="arch" type="xml">
+            <form string="Ventilation Farm">
+                <header>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+                        <button name="action_confirm" string="Confirm" class="oe_highlight" type="object" icon="fa-check" invisible="state != 'draft'"/>
+                        <button name="action_draft" string="Reset to Draft" type="object" icon="fa-undo" class="btn-secondary" invisible="state != 'done'"/>
+                </header>
+                
+                <sheet>
+                    
+                    <div>
+                      <h1> <field name="reference" readonly="1"/></h1>
+                      <field name="date" readonly="1"/>
+                    </div>
+
+                    <group>
+                    <group string="Flock Related information">
+                         <h1><field name ="flock_id" placeholder="Select Flock" required="1" readonly="state !='draft'"/></h1>
+                         <field name ="flock_opening_bird" readonly="state != 'draft'"/>
+                         <field name="current_birds" readonly="state != 'draft'"/>
+                         <field name="age_in_days" readonly="state != 'draft'"/>
+                         <field name="current_age_display" readonly="state != 'draft'" />
+                    </group>
+                    <group string="Farm Details">
+                        <field name="target_temperature" widget="float"  readonly="state != 'draft'" required="1"/>
+                    </group>
+                   
+                    </group>
+                    <notebook>
+                        <page string="Ventilation Levels">
+                            <field name="farm_ventilation_level_line_ids">
+                                <list editable="bottom" decoration-info="state == 'draft'" decoration-success="state == 'done'"  readonly="state != 'draft'">
+                                    <field name="level_id" width="100" readonly="state != 'draft'" required="1"/>
+                                    <field name="target_temperature" width="100" readonly="state != 'draft'"  string="Target Temp"/>
+                                     <field name="min_temperature" width="100" readonly="state != 'draft'"  string="Min Temp"/>
+                                    <field name="max_temperature" width="100" readonly="state != 'draft'" string="Max Temp"/>
+                                    <field name="fan_ids" width="150" readonly="state != 'draft'" widget="many2many_tags"/>
+                                    <field name="LRF_value" width="150" readonly="state != 'draft'" />
+                                    <field name="fan_count" width="100"  readonly="state != 'draft'"/>
+                                    <field name="state" width="100" widget="badge" decoration-success="state == 'done'" decoration-warning="state=='draft'" readonly="state != 'draft' "/>
+                                </list>
+                            </field>
+                        </page>
+
+                        <page string="Related Notes">
+                                <field name="description" placeholder="Enter farm description..." />
+                        </page>
+                        
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_farm_ventilation_level_line_form" model="ir.ui.view">
+        <field name="name">farm.ventilation.level.line.form</field>
+        <field name="model">farm.ventilation.level.line</field>
+        <field name="arch" type="xml">
+            <form string="Farm Ventilation Level">
+                <sheet>
+                    <group>
+                        <field name="ventilation_farm_id"/>
+                        <field name="level_id"/>
+                        <field name="max_temperature"/>
+                        <field name="min_temperature"/>
+                        <field name="fan_ids" widget="many2many_tags"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <record id="action_ventilation_farm_details" model="ir.actions.act_window">
+        <field name="name">Ventilation Farms</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">ventilation.farm.details</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_ventilation_farm_details_list"/>
+    </record>
+
+</odoo>

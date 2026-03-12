@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="view_add_medicine_by_live_temp_tree" model="ir.ui.view">
+        <field name="name">add.medicine.by.live.temperature.list</field>
+        <field name="model">add.medicine.by.live.temperature</field>
+        <field name="arch" type="xml">
+           <list string="Temperature-based Medicine Records" decoration-info="state == 'draft'" decoration-success="state == 'done'">
+            <field name="create_date" width="120"/>
+            <field name="name" width="120"/>
+            <field name="user_id" widget="many2one_avatar_user" width="120"/>
+            <field name="state" widget="badge" decoration-success="state=='done'" decoration-warning="state=='draft'" width="120"/>
+            <field name="selection_type" width="200"/>
+        </list>
+        </field>
+    </record>
+    
+    <record id="view_add_medicine_by_live_temp_form" model="ir.ui.view">
+        <field name="name">add.medicine.by.live.temperature.form</field>
+        <field name="model">add.medicine.by.live.temperature</field>
+        <field name="arch" type="xml">
+            <form string="Medicine Entry">
+                <header>
+                
+                    <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+                    <button name="action_confirm" string="Confirm" class="oe_highlight" type="object" icon="fa-check" invisible="state != 'draft'"/>
+                    <button name="action_draft" string="Return to Draft" type="object" icon="fa-undo" class="btn-secondary" invisible="state != 'done'"/>
+
+                </header>
+                <sheet>
+                    <h2>
+                        <field name="name" readonly="1"/>
+                    </h2>
+                    <group>
+                        <group string="Age &amp; Temperature Range">
+                            <field name="selection_type"/>
+                            <field name="min_temp" invisible="selection_type not in ['temp','age_temp']"/>
+                            <field name="max_temp" invisible="selection_type not in ['temp','age_temp']"/>
+                            <field name="min_age" invisible="selection_type not in ['age','age_temp']"/>
+                            <field name="max_age" invisible="selection_type not in ['age','age_temp']"/>
+                        </group>
+                        <group string="Aditional info">
+                            <field name="date"/>
+                            <field name="user_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Medicine Suggestions">
+                            <field name="medicine_line_ids" readonly="state != 'draft'">
+                            <list string="Medicine Lines" editable="bottom" decoration-info="state == 'draft'" decoration-success="state == 'done'">
+                                <field name="product_id" options="{'no_create': True}" readonly="state != 'draft'" width="150"/>
+                                <field name="user_id" readonly="state != 'draft'" width="120"/>
+                                <field name="selection_display" readonly="state != 'draft'" width="100"/>
+                                <!-- <field name="uom_id" readonly ="state !=d " -->
+                                <field name="dose_per_water_liter" readonly="state != 'draft'" width="120" required="1"/>
+                            </list>
+                            </field>
+                        </page>
+                        <page string="Short Note for Medicines">
+                            <field name="note_html"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_add_medicine_by_live_temp" model="ir.actions.act_window">
+        <field name="name">Medicine Entry</field>
+        <field name="res_model">add.medicine.by.live.temperature</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Record temperature variations and suggest medicines automatically.
+            </p>
+        </field>
+    </record>
+
+   <!-- <menuitem id="menu_add_medicine_by_live_temp_root" name="Medicine Entry" parent="menu_layer_flock_root" sequence="122" action="action_add_medicine_by_live_temp"/> -->
+
+</odoo>

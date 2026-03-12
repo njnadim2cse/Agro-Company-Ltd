@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record id="gatepass_company_rule" model="ir.rule">
+    <field name="name">Gate Pass (Company)</field>
+    <field name="model_id" ref="gate_pass.model_gatepass_gatepass"/>
+    <field name="global" eval="True"/>
+    <field name="domain_force">
+      [('company_id', 'in', company_ids)]
+    </field>
+  </record>
+
+  <record id="gatepass_people_company_rule" model="ir.rule">
+    <field name="name">Gate Pass People (Company)</field>
+    <field name="model_id" ref="gate_pass.model_gatepass_people"/>
+    <field name="global" eval="True"/>
+    <field name="domain_force">
+      [('company_id', 'in', company_ids)]
+    </field>
+  </record>
+
+</odoo>

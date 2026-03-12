@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Nutrition Standard List View -->
+    <record id="view_feed_nutrition_standard_list" model="ir.ui.view">
+        <field name="name">feed.nutrition.standard.list</field>
+        <field name="model">feed.nutrition.standard</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="nutrition_id"/>
+                <field name="min_standard"/>
+                <field name="max_standard"/>
+                <field name="required_standard"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Nutrition Standard Form View -->
+    <record id="view_feed_nutrition_standard_form" model="ir.ui.view">
+        <field name="name">feed.nutrition.standard.form</field>
+        <field name="model">feed.nutrition.standard</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="nutrition_id"/>
+                        </group>
+                        <group string="Nutrient Standards Per Unit (per 100kg batch)">
+                            <field name="min_standard"/>
+                            <field name="max_standard"/>
+                            <field name="required_standard"/>
+                        </group>
+                    </group>
+                    <div class="alert alert-info" role="alert">
+                        <strong>Note:</strong> These standards are for 100kg batch size. All calculations will be based on per 100kg basis.
+                    </div>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Nutrition Standard Action -->
+    <record id="action_feed_nutrition_standard" model="ir.actions.act_window">
+        <field name="name">Nutrition Standards</field>
+        <field name="res_model">feed.nutrition.standard</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

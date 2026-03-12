@@ -1,0 +1,7 @@
+<odoo>   
+    <template id="hatchery_assets" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet" type="text/css" href="/hatchery23/static/src/css/style.css"/>
+        </xpath>
+    </template>
+</odoo>

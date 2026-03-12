@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="view_menual_temperature_entry_tree" model="ir.ui.view">
+            <field name="name">menual.temperature.entry.list</field>
+            <field name="model">menual.temperature.entry</field>
+            <field name="arch" type="xml">
+                <list string="Manual Temperature Entries">
+                    <field name="date" width="100"/>
+                    <field name="name" width="100"/>
+                    <field name="created_by" readonly="1"  widget="many2one_avatar_user" width="120"/>
+                    <field name="state" widget="badge" decoration-success="state == 'done'" decoration-warning="state=='draft'" readonly="state != 'draft' " width="100"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_menual_temperature_entry_form" model="ir.ui.view">
+            <field name="name">menual.temperature.entry.form</field>
+            <field name="model">menual.temperature.entry</field>
+            <field name="arch" type="xml">
+                <form string="Manual Temperature Entry" delete="0">
+                <header>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+                    <button name="action_done" string="Confirm" class="oe_highlight" type="object" icon="fa-check" invisible="state != 'draft'"/>
+                    <button name="action_draft" string="Reset to Draft" type="object" icon="fa-undo" class="btn-secondary" invisible="state != 'done'"/>
+                </header>
+                    <sheet>
+                        <div>
+                            <h1> <field name="name" readonly="1"/></h1>
+                            <field name="date" readonly="1"/>
+                        </div>
+                        <group>
+                            <group string="Flock related information">
+                                <h1> <field name ="flock_id" placeholder="Select Flock"/> </h1>
+                                 <field name="flock_opening_bird"/>
+                                 <field name="current_birds"/>
+                                 <field name="age_in_days"/>
+                                 <field name="current_age_display"/>
+                            </group>
+                            <group string ="Additional Information">
+                                <field name="created_by" readonly="1"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <page string="Today hourly temperatures">
+                                <field name="daily_temperature_ids">
+                                    <list editable="bottom">
+                                        <field name="date" width="100" readonly="state != 'draft' "/>
+                                        <field name="time_now" width="100" placeholder="Select Time" required="1" readonly="state != 'draft' "/>
+                                        <field name="temperature" required="1" width="100" readonly="state != 'draft' "/>
+                                        <field name="state" width="100" widget="badge" decoration-success="state == 'done'" decoration-warning="state=='draft'" readonly="state != 'draft' "/>
+                                        <button name="action_draft"  string="Submit" type="object" class="oe_highlight" width="100" invisible="state=='done'" readonly="state != 'draft' "/>
+                                        <button name="action_open_level_line" string="Open Matched Level"  type="object"   class="oe_highlight" invisible="state=='draft'" readonly="state != 'draft' " width="100"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_menual_temperature_entry" model="ir.actions.act_window">
+            <field name="name">Manual Temperature Entry</field>
+            <field name="res_model">menual.temperature.entry</field>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+                <p>Manual Temperature entry for tunnel ventilation system.</p>
+            </field>
+        </record>
+<!-- 
+        <menuitem id="menu_configuration_root"
+                  name="Configuration"
+                  parent="menu_layer_flock_root"
+                  sequence="11"/>
+
+        <menuitem id="menu_menual_temperature_entry"
+                  name="Manual Temp Entry"
+                  parent="menu_configuration_root"
+                  action="action_menual_temperature_entry"/> -->
+
+    </data>
+</odoo>

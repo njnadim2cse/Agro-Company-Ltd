@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_farm_medicine_approval,Farm.Medicine.Approval,model_farm_medicine_approval,base.group_user,1,1,1,1
+access_farm_medicine_approval_line,Farm.Medicine.Approval.Line,model_farm_medicine_approval_line,base.group_user,1,1,1,1
+access_farm_medicine_rejection_wizard,Farm.Medicine.Rejection.Wizard,model_farm_medicine_rejection_wizard,base.group_user,1,1,1,1

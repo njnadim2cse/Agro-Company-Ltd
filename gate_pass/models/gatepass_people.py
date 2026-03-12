@@ -3,6 +3,14 @@ from odoo import models, fields, api
 class GatePassPeople(models.Model):
     _name = 'gatepass.people'
     _description = 'People details for gate pass'
+    _check_company_auto = True
+
+    company_id = fields.Many2one(
+        "res.company",
+        required=True,
+        default=lambda self: self.env.company,
+        index=True
+    )
     
     gatepass_id = fields.Many2one('gatepass.gatepass', string='Gate Pass', required=True, ondelete='cascade')
     name = fields.Char(string='Name', required=True)

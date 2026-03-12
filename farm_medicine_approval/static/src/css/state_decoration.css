@@ -1,0 +1,53 @@
+/* Approval Lines List Decorations */
+.list-group .o_data_row.decoration-info {
+    background-color: #d1ecf1 !important;
+    border-left: 3px solid #17a2b8 !important;
+}
+
+.list-group .o_data_row.decoration-warning {
+    background-color: #fff3cd !important;
+    border-left: 3px solid #ffc107 !important;
+}
+
+.list-group .o_data_row.decoration-success {
+    background-color: #d4edda !important;
+    border-left: 3px solid #28a745 !important;
+}
+
+.list-group .o_data_row.decoration-danger {
+    background-color: #f8d7da !important;
+    border-left: 3px solid #dc3545 !important;
+}
+
+/* Badge Styling */
+.badge.badge-success {
+    background-color: #28a745 !important;
+    color: white !important;
+}
+
+.badge.badge-warning {
+    background-color: #ffc107 !important;
+    color: #212529 !important;
+}
+
+.badge.badge-info {
+    background-color: #17a2b8 !important;
+    color: white !important;
+}
+
+.badge.badge-danger {
+    background-color: #dc3545 !important;
+    color: white !important;
+}
+
+/* Rejection Reason Field Styling */
+.field.rejection_reason.decoration-danger {
+    background-color: #f8d7da !important;
+    border: 1px solid #dc3545 !important;
+    border-radius: 4px;
+    padding: 8px;
+}
+
+.field.rejection_reason.decoration-danger .o_input {
+    background-color: transparent !important;
+}

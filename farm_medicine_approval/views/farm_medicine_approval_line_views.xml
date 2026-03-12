@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+        <record id="view_farm_medicine_approval_line_list" model="ir.ui.view">
+            <field name="name">farm.medicine.approval.line.list</field>
+            <field name="model">farm.medicine.approval.line</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="product_id"/>
+                    <field name="requested_quantity"/>
+                    <field name="dose_per_bird"/>
+                    <field name="remaining_dose"/>
+                    <field name="requested_quantity"/>
+                    <field name="approval_id"/>
+                </list>
+            </field>
+        </record>
+        <record id="view_farm_medicine_approval_line_form" model="ir.ui.view">
+            <field name="name">farm.medicine.approval.line.form</field>
+            <field name="model">farm.medicine.approval.line</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="product_id"/>
+                            <field name="requested_quantity"/>
+                            <field name="dose_per_bird"/>
+                            <field name="remaining_dose"/>
+                            <field name="approval_id"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+</odoo>

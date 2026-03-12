@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Ingredient Details Report Action -->
+    <record id="report_action_ingredient_details" model="ir.actions.report">
+        <field name="name">Ingredient Details Report</field>
+        <field name="model">feed.formula</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">nutrition_management.report_ingredient_details</field>
+        <field name="print_report_name">'Ingredient Details - %s' % (object.name)</field>
+    </record>
+
+    <!-- Nutrient Details Report Action -->
+    <record id="report_action_nutrient_details" model="ir.actions.report">
+        <field name="name">Nutrient Details Report</field>
+        <field name="model">feed.formula</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">nutrition_management.report_nutrient_details</field>
+        <field name="print_report_name">'Nutrient Details - %s' % (object.name)</field>
+    </record>
+
+    <!-- Total Nutrient Summary Report -->
+    <record id="report_action_nutrient_summary" model="ir.actions.report">
+        <field name="name">Total Nutrients Summary Report</field>
+        <field name="model">feed.formula</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">nutrition_management.report_nutrient_summary</field>
+        <field name="print_report_name">'Total Nutrients Summary - %s' % (object.name)</field>
+    </record>
+</odoo>

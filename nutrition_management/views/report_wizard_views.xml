@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Report Wizard Form View -->
+    <record id="view_nutrition_report_wizard_form" model="ir.ui.view">
+        <field name="name">nutrition.report.wizard.form</field>
+        <field name="model">nutrition.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Nutrition Report Wizard">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="report_type"/>
+                        <field name="formula_id" required="1"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_generate_report" string="Generate Report" type="object" class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Report Wizard Action -->
+    <record id="action_nutrition_reports_wizard" model="ir.actions.act_window">
+        <field name="name">Nutrition Reports</field>
+        <field name="res_model">nutrition.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

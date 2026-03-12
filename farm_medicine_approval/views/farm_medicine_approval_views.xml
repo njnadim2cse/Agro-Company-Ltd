@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_farm_medicine_approval_kanban" model="ir.ui.view">
+        <field name="name">farm.medicine.approval.kanban</field>
+        <field name="model">farm.medicine.approval</field>
+        <field name="arch" type="xml">
+            <kanban create="false" class="o_medicine_approval_kanban" default_group_by="state" default_order="request_date desc" group_create="false" group_edit="false" group_delete="false">
+                <field name="name"/>
+                <field name="state"/>
+                <field name="request_date"/>
+                <field name="flock_id"/>
+                <field name="approved_by"/>
+                <field name="approval_date"/>
+                <field name="rejected_by"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div class="ribbon ribbon-top-right" t-if="record.state.raw_value != 'draft'">
+                                <span t-if="record.state.raw_value == 'submitted'" class="bg-warning">Submitted</span>
+                                <span t-if="record.state.raw_value == 'approved'" class="bg-success">Approved</span>
+                                <span t-if="record.state.raw_value == 'refused'" class="bg-danger">Rejected</span>
+                                <span t-if="record.state.raw_value == 'requested'" class="bg-info">Completed</span>
+                            </div>
+                            <div class="o_kanban_header">
+                                <strong>
+                                    <field name="name" class="fw-bolder fs-5"/>
+                                </strong>
+                            </div>
+                            <div class="o_kanban_body">
+                                <div class="mb-2">
+                                    <field name="flock_id" class="text-muted"/>
+                                </div>
+                                <div class="d-flex text-muted mb-2">
+                                    <small>
+                                        <field name="request_date" widget="datetime"/>
+                                    </small>
+                                </div>
+                                <div t-if="record.state.raw_value == 'submitted'" class="stock-info">
+                                    <small class="text-info">
+                                        <i class="fa fa-cubes me-1"/>Ready for approval
+                                    </small>
+                                </div>
+                                <div t-if="record.state.raw_value == 'approved'" class="approval-info">
+                                    <small class="text-success">
+                                        <i class="fa fa-check-circle me-1"/>
+                                        <field name="approved_by" widget="many2one_avatar_user"/>
+                                        <field name="approval_date" widget="datetime"/>
+                                    </small>
+                                </div>
+                                <div t-if="record.state.raw_value == 'refused'" class="rejection-info">
+                                    <small class="text-danger">
+                                        <i class="fa fa-times-circle me-1"/>
+                                        <field name="rejected_by" widget="many2one_avatar_user"/>
+                                    </small>
+                                </div>
+                            </div>
+                            <footer class="o_kanban_footer">
+                                <field name="activity_ids" widget="kanban_activity" class="me-auto"/>
+                                <div class="oe_kanban_action">
+                                    <button t-if="record.state.raw_value == 'draft'" 
+                                            name="action_submit" 
+                                            type="object" 
+                                            class="btn btn-sm btn-primary"
+                                            string="Submit"/>
+                                    
+                                    <button t-if="record.state.raw_value == 'submitted'" 
+                                            name="action_approve" 
+                                            type="object" 
+                                            class="btn btn-sm btn-success me-1"
+                                            string="Approve"/>
+                                    
+                                    <button t-if="record.state.raw_value == 'submitted'" 
+                                            name="action_reject" 
+                                            type="object" 
+                                            class="btn btn-sm btn-danger"
+                                            string="Reject"/>
+                                    
+                                    <button t-if="record.state.raw_value == 'approved'" 
+                                            class="btn btn-sm btn-outline-success"
+                                            disabled="1"
+                                            string="Approved"/>
+                                    
+                                    <button t-if="record.state.raw_value == 'refused'" 
+                                            class="btn btn-sm btn-outline-danger"
+                                            disabled="1"
+                                            string="Rejected"/>
+                                </div>
+                            </footer>
+                        </div>
+                    </t>
+                </templates>
+                
+                <column name="state">
+                    <value name="draft" string="Draft"/>
+                    <value name="submitted" string="To Approve"/>
+                    <value name="approved" string="Approved"/>
+                    <value name="refused" string="Rejected"/>
+                    <value name="requested" string="Completed"/>
+                </column>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_farm_medicine_approval_form" model="ir.ui.view">
+        <field name="name">farm.medicine.approval.form</field>
+        <field name="model">farm.medicine.approval</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_submit"
+                            type="object"
+                            string="Submit"
+                            class="btn-primary"
+                            icon="fa-paper-plane"/>
+
+                    <button name="action_approve"
+                            type="object"
+                            string="Approve"
+                            class="btn-primary"
+                            icon="fa-check-circle"/>
+
+                    <button name="action_reject"
+                            type="object"
+                            string="Reject"
+                            class="btn-secondary"
+                            icon="fa-times-circle"/>
+
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,submitted,approved,refused"/>
+                </header>
+
+                <sheet>
+                
+                    <div>
+                      <h1>  <field name="name" readonly="1"/></h1>
+                    </div>
+
+                    <group>
+                        <group string="Flock Details">
+                            <field name="flock_id"/>
+                            <field name="current_birds"/>
+                            <field name="current_age_display"/>
+                            <field name="bird_type"/>
+                        </group>
+                        <group string="Additional information">
+                           <field name="requested_by"/>
+                           <field name="request_date"/>
+                             
+                            
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <!-- Approval Lines Tab -->
+                       <page string="Approval Lines">
+                            <field name="approval_line_ids">
+                                <list editable="bottom" 
+                                    decoration-info="parent.state == 'draft'" 
+                                    decoration-warning="parent.state == 'submitted'"
+                                    decoration-success="parent.state == 'approved'"
+                                    decoration-danger="parent.state == 'refused'">
+                                    <field name="product_id" width="100"/>
+                                    <field name="requested_quantity" width="100"/>
+                                    <field name="consume_quantity" width="100"/>
+                                    <field name="total_cost" width="100"/>
+                                    <!-- <field name="state" widget="badge" 
+                                        decoration-success="state=='approved'" 
+                                        decoration-warning="state=='draft'"
+                                        decoration-info="state=='submitted'"
+                                        decoration-danger="state=='refused'"/> -->
+                                </list>
+                            </field>
+                     </page>
+
+                        <!-- Rejection Tab -->
+                        <page string="Rejection Details">
+                            <group>
+                                <field name="rejection_reason" nolabel="1" invisible="state != 'refused'"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+
+                <!-- Chatter for Odoo 18 -->
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- List View -->
+    <record id="view_farm_medicine_approval_list" model="ir.ui.view">
+        <field name="name">farm.medicine.approval.list</field>
+        <field name="model">farm.medicine.approval</field>
+        <field name="arch" type="xml">
+            <list string="Medicine Approvals" 
+              decoration-info="state == 'draft'" 
+              decoration-warning="state == 'submitted'"
+              decoration-success="state == 'approved'"
+              decoration-danger="state == 'refused'">
+
+            <field name="request_date" width="120"/>
+            <field name="name" width="150"/>
+            <field name="flock_id" width="150"/>
+            <field name="requested_by" width="150"/>
+            <field name="approved_by" width="150"/>
+
+        </list>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_farm_medicine_approval" model="ir.actions.act_window">
+        <field name="name">Medicine Approvals</field>
+        <field name="res_model">farm.medicine.approval</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No medicine approvals found.
+            </p>
+            <p>
+                Create new medicine approval requests for your farm.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem id="menu_farm_management_root" name="Medicine Approval" sequence="100"/>
+    <menuitem id="menu_farm_medicine" name="Medicine" parent="menu_farm_management_root" sequence="10"/>
+    <menuitem id="menu_farm_medicine_approval"
+              name="Approvals"
+              parent="menu_farm_medicine"
+              action="action_farm_medicine_approval"
+              sequence="10"/>
+
+</odoo>

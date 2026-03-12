@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+    <t t-name="layer_temp_dash.DashboardTemplate">
+        <section class="o_dashboard_wrap">
+            <div class="wrap" role="main">
+                <header class="topbar">
+                    <div class="brand">
+                        <div class="logo">DB</div>
+                        <div>
+                            <h1>Dhaka Climate Dashboard</h1>
+                            <div class="muted" style="font-size:0.85rem">
+                                Live hourly &amp; 3-day summary — responsive &amp; custom background
+                            </div>
+                        </div>
+                    </div>
+                    <div class="controls">
+                      
+                        <button id="refreshBtn" class="small">Refresh Now</button>
+                    </div>
+                </header>
+
+                <div class="grid-top">
+                    <section class="card left">
+                         <div class="current-header">
+                             <h2 id="locationName">Loading...</h2>
+                             <div id="currentTemp" class="current-temp">--°C</div>
+                        </div>
+                        <div class="hourly">
+                            <table id="hourlyTable">
+                                <thead>
+                                    <tr>
+                                        <th>Time</th>
+                                        <th>Temp (°C)</th>
+                                        <th>Wind (km/h)</th>
+                                        <th>Precip (mm)</th>
+                                        <th>Cond</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <aside class="card right">
+                        <h2>📅 Future 3-Day Forecast</h2>
+                        <div class="forecast-list" id="threeDay"></div>
+                        <div style="margin-top:12px;display:flex;justify-content:space-between;">
+                            <div class="muted">Source: Meteoblue</div>
+                            <div class="kpi">
+                                <div class="val" id="lastUpdated">--</div>
+                                <div class="muted" style="font-size:0.8rem">Last update</div>
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+
+                <div class="charts">
+                    <div class="card chart-card">
+                        <h2>🌡️ Temperature (Today)</h2>
+                        <canvas id="tempChart"></canvas>
+                    </div>
+                    <div class="card chart-card">
+                        <h2>💨 Wind Speed (Today)</h2>
+                        <canvas id="windChart"></canvas>
+                    </div>
+                </div>
+
+                <footer>
+                    Dashboard is responsive • Auto-refreshes every 60 minutes
+                </footer>
+            </div>
+        </section>
+    </t>
+</templates>

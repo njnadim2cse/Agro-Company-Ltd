@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- CRON: Update Layer Flock Current Age -->
+        <record id="ir_cron_update_layer_flock_age" model="ir.cron">
+            <field name="name">Update Layer Flock Current Age</field>
+            <field name="model_id" ref="model_farm_layer_flock"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_update_current_age()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="active">True</field>
+        </record>
+    </data>
+</odoo>

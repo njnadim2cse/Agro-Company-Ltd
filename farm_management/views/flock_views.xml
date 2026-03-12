@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="view_layer_flock_list" model="ir.ui.view">
+        <field name="name">farm.layer.flock.list</field>
+        <field name="model">farm.layer.flock</field>
+        <field name="arch" type="xml">
+            <list string="Flock List" decoration-info="state == 'draft'" decoration-success="state == 'done'" delete="1">
+                <field name="date" width="100"/>
+                <field name="name" width="100" invisible="state == 'draft'"/>
+                <field name="created_by" widget="many2one_avatar_user" width="120"/>
+                <field name="bird_type" width="100" invisible="state == 'draft'" />
+                <field name="state"  widget="badge" decoration-success="state=='done'" decoration-warning="state=='draft'" width="120"/>
+                <field name="opening_bird_count" width="100"/>
+                <field name="total_qty" width="100"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_layer_flock_form" model="ir.ui.view">
+        <field name="name">farm.layer.flock.form</field>
+        <field name="model">farm.layer.flock</field>
+        <field name="arch" type="xml">
+            <form string="Flock Information" delete="0">
+                 <header>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+                    <button name="action_confirm" string="Confirm" class="oe_highlight" type="object" icon="fa-check" invisible="state != 'draft'"/>
+                    <button name="action_draft" string="Reset to Draft" type="object" icon="fa-undo" class="btn-secondary" invisible="state != 'done'"/>
+                </header>
+
+                <sheet>
+                    <div>
+                       <h1> <field name="reference" readonly="1"/></h1>
+                       <field name="date" readonly="1"/>
+                    </div>
+                    <group col="2">
+                        <group string="Flock Information">
+                           <h1> <field name="name" placeholder="Enter Flock Name" readonly="state != 'draft' "/> </h1>
+                            <field name="start_date" readonly="state != 'draft' " required="1" string="Flock Starting Date"/>
+                            <field name="bird_type" readonly="state != 'draft' " placeholder="Select Birds Type"/>
+                            <field name="product_id" readonly="state != 'draft' " string="Birds" placeholder="Select Birds"/>
+                            <field name="age_in_days" readonly="state != 'draft' " required="1"/>
+                        </group>
+
+                        <group string="Flock Related information">
+                            <field name="opening_bird_count" readonly="state != 'draft' "/>
+                            <field name="total_qty" readonly="state != 'draft' "/>
+                            <field name="age_display" readonly="state != 'draft' "/>
+                            <field name="current_age_in_days" readonly="state != 'draft' "/>
+                            <field name ="current_age_display" readonly="state != 'draft' "/>
+                        </group>
+                    </group>
+                    <notebook>
+
+                        <page string="Flock Notes &amp; Observations">
+                            <field name="note_html" readonly="state != 'draft' "/>
+                        </page>
+
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_layer_flock_graph" model="ir.ui.view">
+        <field name="name">farm.layer.flock.graph</field>
+        <field name="model">farm.layer.flock</field>
+        <field name="arch" type="xml">
+            <graph string="Flock Overview" type="bar">
+                <field name="bird_type" type="row"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="action_layer_flock_dashboard" model="ir.actions.act_window">
+        <field name="name">Flock Setup</field>
+        <field name="res_model">farm.layer.flock</field>
+        <field name="view_mode">list,form,graph</field>
+        <field name="view_ids" eval="[
+            (5, 0, 0),
+            (0, 0, {'view_mode':'list','view_id':ref('view_layer_flock_list')}),
+            (0, 0, {'view_mode':'form','view_id':ref('view_layer_flock_form')}),
+            (0, 0, {'view_mode':'graph','view_id':ref('view_layer_flock_graph')})
+        ]"/>
+    </record>
+
+</odoo>

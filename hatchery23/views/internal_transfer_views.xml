@@ -1,0 +1,109 @@
+<odoo>
+    <!-- ============================= -->
+    <!--  ACTION                      -->
+    <!-- ============================= -->
+    <record id="action_internal_transfer" model="ir.actions.act_window">
+        <field name="name">Internal Transfers</field>
+        <field name="res_model">internal.transfer</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first Internal Transfer record.
+            </p>
+        </field>
+    </record>
+
+    <!-- ============================= -->
+    <!--  MENU                        -->
+    <!-- ============================= -->
+    <menuitem id="menu_chicken_egg_distribution"
+              name="Egg Distribution"
+              parent="menu_hatchery_management"
+              sequence="50"/>
+     <menuitem id="menu_internal_transfer"
+          name="Internal Transfers"
+          parent="menu_chicken_egg_distribution"
+          sequence="10"
+          action="action_internal_transfer"/>
+
+    <!-- ============================= -->
+    <!--  LIST VIEW                   -->
+    <!-- ============================= -->
+    <record id="view_internal_transfer_list" model="ir.ui.view">
+        <field name="name">internal.transfer.list</field>
+        <field name="model">internal.transfer</field>
+        <field name="arch" type="xml">
+            <list string="Internal Transfers">
+                <field name="name" readonly="1"/>
+                <field name="packaging_id"/>
+                <field name="picking_id"/>
+                <field name="source_location"/>
+                <field name="destination_location"/>
+                <field name="chicks_count"/>
+                <field name="transfer_date"/>
+                <field name="state"/>
+            
+            </list>
+        </field>
+    </record>
+
+    <!-- ============================= -->
+    <!--  FORM VIEW                   -->
+    <!-- ============================= -->
+    <record id="view_internal_transfer_form" model="ir.ui.view">
+        <field name="name">internal.transfer.form</field>
+        <field name="model">internal.transfer</field>
+        <field name="arch" type="xml">
+            <form string="Internal Transfer">
+                <!-- HEADER -->
+                <header>
+                     <!-- Button: Done (create picking) -->
+                    <button name="action_done"
+                           type="object"
+                           string="Done"
+                           class="btn-primary" icon="fa-arrow-right"/>
+
+    <!-- Button: Delivered (validate picking) -->
+                <button name="action_delivered"
+                         type="object"
+                         string="Delivered"
+                         class="btn-success" icon="fa-check"/>
+
+    <!-- Status Bar -->
+                <field name="state"
+                      widget="statusbar"
+                    statusbar_visible="draft,done,delivered"/>
+               </header>
+
+
+                <!-- FORM BODY -->
+                <sheet>
+                    <h1>
+                       <field name="name" readonly="1"/>
+                    </h1>
+                    <group>
+                        <group>
+                        
+                            <field name="packaging_id" readonly="1"/>
+                            <field name="chicks_count"/>
+                            <field name="transfer_date"/>
+                        </group>
+                        <group>
+                            <field name="source_location"/>
+                            <field name="destination_location"/>
+                            <field name="picking_id" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Notes">
+                            <field name="note" widget="html"/>
+                        </page>
+                    </notebook>
+                </sheet>
+
+                <chatter/>
+            </form>
+        </field>
+    </record>
+</odoo>

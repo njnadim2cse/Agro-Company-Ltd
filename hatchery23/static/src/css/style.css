@@ -1,0 +1,75 @@
+/* =========================
+   IcoMoon Font Definition
+========================= */
+@font-face {
+    font-family: 'icomoon';
+    src:  url('/hatchery23/static/src/fonts/icomoon.eot?y3rsbq');
+    src:  url('/hatchery23/static/src/fonts/icomoon.eot?y3rsbq#iefix') format('embedded-opentype'),
+          url('/hatchery23/static/src/fonts/icomoon.ttf?y3rsbq') format('truetype'),
+          url('/hatchery23/static/src/fonts/icomoon.woff?y3rsbq') format('woff'),
+          url('/hatchery23/static/src/fonts/icomoon.svg?y3rsbq#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+}
+
+/* =========================
+   Base Icon Class
+========================= */
+[class^="icon-"], [class*=" icon-"] {
+    font-family: 'icomoon' !important;
+    speak: never;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+
+    /* Better Font Rendering */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* =========================
+   Custom Egg Icon
+========================= */
+.icon-ChatGPT-Image-Oct-15 {
+    display: inline-block;
+    font-size: 18px;  /* adjust size */
+    vertical-align: middle;
+}
+
+/* Each path in your IcoMoon SVG font */
+.icon-ChatGPT-Image-Oct-15 .path1:before { content: "\e900"; color: #000; }
+.icon-ChatGPT-Image-Oct-15 .path2:before { content: "\e901"; color: #000; }
+.icon-ChatGPT-Image-Oct-15 .path3:before { content: "\e902"; color: #000; }
+.icon-ChatGPT-Image-Oct-15 .path4:before { content: "\e903"; color: #101010; }
+.icon-ChatGPT-Image-Oct-15 .path5:before { content: "\e904"; color: #0f0f0f; }
+.icon-ChatGPT-Image-Oct-15 .path6:before { content: "\e905"; color: #121211; }
+.icon-ChatGPT-Image-Oct-15 .path7:before { content: "\e906"; color: #0c0c0b; }
+.icon-ChatGPT-Image-Oct-15 .path8:before { content: "\e907"; color: #0c0b0b; }
+.icon-ChatGPT-Image-Oct-15 .path9:before { content: "\e908"; color: #0e0d0d; }
+.icon-ChatGPT-Image-Oct-15 .path10:before { content: "\e909"; color: #111212; }
+.icon-ChatGPT-Image-Oct-15 .path11:before { content: "\e90a"; color: #0b0b0b; }
+.icon-ChatGPT-Image-Oct-15 .path12:before { content: "\e90b"; color: #111011; }
+.icon-ChatGPT-Image-Oct-15 .path13:before { content: "\e90c"; color: #0b0b0b; }
+.icon-ChatGPT-Image-Oct-15 .path14:before { content: "\e90d"; color: #0c0d0d; }
+.icon-ChatGPT-Image-Oct-15 .path15:before { content: "\e90e"; color: #111212; }
+.icon-ChatGPT-Image-Oct-15 .path16:before { content: "\e90f"; color: #121312; }
+.icon-ChatGPT-Image-Oct-15 .path17:before { content: "\e910"; color: #111210; }
+.icon-ChatGPT-Image-Oct-15 .path18:before { content: "\e911"; color: #141212; }
+.icon-ChatGPT-Image-Oct-15 .path19:before { content: "\e912"; color: #111111; }
+.icon-ChatGPT-Image-Oct-15 .path20:before { content: "\e913"; color: #0f0d0d; }
+.icon-ChatGPT-Image-Oct-15 .path21:before { content: "\e914"; color: #111112; }
+.icon-ChatGPT-Image-Oct-15 .path22:before { content: "\e915"; color: #0d0d0c; }
+.icon-ChatGPT-Image-Oct-15 .path23:before { content: "\e916"; color: #0e0c0c; }
+.icon-ChatGPT-Image-Oct-15 .path24:before { content: "\e917"; color: #121211; }
+
+/* =========================
+   Utility Class
+========================= */
+.icomoon_icon {
+    font-family: 'icomoon';
+    font-size: 18px;
+    vertical-align: middle;
+}

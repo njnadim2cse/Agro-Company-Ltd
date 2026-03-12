@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="action_mortality_detail" model="ir.actions.act_window">
+        <field name="name">Bird Mortality</field>
+        <field name="res_model">farm.mortality.details</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    
+    <!-- <menuitem id="menu_mortality_root" name="Bird Mortality" parent="menu_layer_flock_root" action="action_mortality_detail" sequence="20"/> -->
+    <record id="view_mortality_list" model="ir.ui.view">
+        <field name="name">farm.mortality.details.list</field>
+        <field name="model">farm.mortality.details</field>
+        <field name="arch" type="xml">
+        <list string="Mortality Records" decoration-info="state == 'draft'" decoration-success="state == 'done'" >
+            <field name="date" readonly="1" width="50"/>
+            <field name="name" width="100" invisible ="state == 'draft'"/>
+            <field name="flock_id" width="100"/>
+            <field name="created_by" widget="many2one_avatar_user" width="120"/>
+            <field name="state" widget="badge" decoration-success="state=='done'" decoration-warning="state=='draft'" width="120"/>
+            <field name="flock_opening_bird" width="100"/>
+            <field name="current_birds" width="100" invisible="state == 'draft'"/>
+            <field name="total_mortality" width="100"/>
+            <field name="cumaletive_mortality" readonly="1" width="100" invisible ="state == 'draft'"/>
+        </list>
+    </field>
+    </record>
+
+    <record id="view_mortality_form" model="ir.ui.view">
+        <field name="name">farm.mortality.details.form</field>
+        <field name="model">farm.mortality.details</field>
+        <field name="arch" type="xml">
+            <form string="Mortality Details" delete="0">
+               <header>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+                    <button name="action_confirm" string="Confirm" class="oe_highlight" type="object" icon="fa-check" invisible="state != 'draft'"/>
+                    <button name="action_draft" string="Reset to Draft" type="object" icon="fa-undo" class="btn-secondary" invisible="state != 'done'"/>
+                </header>
+                <sheet>
+                
+                    <div>
+                      <h1> <field name="name" readonly="1"/></h1>
+                      <field name="date" readonly="1"/>
+                    </div>
+
+                    <group col="2">
+                        <group string="Flock Details">
+                           <h1> <field name="flock_id" readonly="state != 'draft' " placeholder="Select Flock" required="1" options="{'no_create': True}"/></h1>
+                            <field name="age_in_days" readonly="state != 'draft' "/>
+                            <field name="current_age_display" readonly="state != 'draft' "/>
+                            <field name="flock_opening_bird" readonly="state != 'draft' "/>
+                            <field name="flock_starting_date" readonly="state != 'draft' "/>
+                            <field name="flock_ending_date" readonly="state != 'draft' "/>
+                        </group>
+                        <group string="Mortality Details">
+                             <field name="current_birds" readonly="state != 'draft' "/>
+                            <field name="new_added_" readonly="state != 'draft' " string="Total New Mortality"/>
+                            
+                        </group>
+                    </group>
+                         <notebook>
+                            <page string="Daily Mortality Breakdown">
+                                <field name="breakdown_ids" readonly="state != 'draft' ">
+                                    <list editable="bottom" decoration-info="state == 'draft'" decoration-success="state == 'done'">
+                                        <field name ="date" width="80"/>
+                                        <field name="type" width="120"/>
+                                        <field name="count" width="120"/>
+                                        <field name="state" width="100" widget="badge" decoration-success="state == 'done'" decoration-warning="state=='draft'"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Daily Mortality Summary">
+                                    <group string="Daily Mortality Summary">
+                                        <table class="o_list_table table table-striped table-bordered table-hover">
+                                            <thead class="thead-dark">
+                                                <tr>
+                                                    <th>Cause</th>
+                                                    <th>Today's Mortality</th>
+                                                    <th>Cause Percentage</th>
+                                                    <th>Cumulative Mortality</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Normal Cause</td>
+                                                    <td><field name="normal_cause_mortality"/></td>
+                                                    <td><field name="cause_percentage_normal" style="display:inline;"/> <span style="display:inline;">%</span></td>
+                                                    <td><field name="comalitive_mortality_normal"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Culled Cause</td>
+                                                    <td><field name="culled_cause_mortality"/></td>
+                                                    <td><field name="cause_percentage_culled" style="display:inline;"/> <span style="display:inline;">%</span></td>
+                                                    <td><field name="comalitive_mortality_culled"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Vaccine Reaction</td>
+                                                    <td><field name="vaccine_reaction_mortality"/></td>
+                                                    <td><field name="cause_percentage_vaccine" style="display:inline;"/> <span style="display:inline;">%</span></td>
+                                                    <td><field name="comalitive_mortality_vaccine"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Prolapse</td>
+                                                    <td><field name="prolapse_mortality"/></td>
+                                                    <td><field name="cause_percentage_prolapse" style="display:inline;"/> <span style="display:inline;">%</span></td>
+                                                    <td><field name="comalitive_mortality_prolapse"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Heat Stress</td>
+                                                    <td><field name="heat_stress_mortality"/></td>
+                                                    <td><field name="cause_percentage_heat_stress" style="display:inline;"/> <span style="display:inline;">%</span></td>
+                                                    <td><field name="comalitive_mortality_heat_stress"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Mechanical</td>
+                                                    <td><field name="mechanical_mortality"/></td>
+                                                    <td><field name="cause_percentage_mechanical" style="display:inline;"/> <span style="display:inline;">%</span></td>
+                                                    <td><field name="comalitive_mortality_mechanical"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Injury</td>
+                                                    <td><field name="injury_mortality"/></td>
+                                                    <td><field name="cause_percentage_injury" style="display:inline;"/> <span style="display:inline;">%</span></td>
+                                                    <td><field name="comalitive_mortality_injury"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Other Cause</td>
+                                                    <td><field name="other_cause_mortality"/></td>
+                                                    <td><field name="cause_percentage_other" style="display:inline;"/> <span style="display:inline;">%</span></td>
+                                                    <td><field name="comalitive_mortality_other"/></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </group>
+
+                                    <group string="Overall Mortality Summary">
+                                        <table class="o_list_table table table-bordered table-sm mt-4">
+                                            <thead class="thead-light">
+                                                <tr>
+                                                    <th>Total Mortality</th>
+                                                    <th>Overall Mortality %</th>
+                                                    <th>Cumulative Mortality</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td><field name="total_mortality" readonly="1"/></td>
+                                                    <td><field name="today_overall_mortality_percentage" style="display:inline;"/> <span style="display:inline;">%</span></td>
+                                                    <td><field name="cumaletive_mortality" readonly="1"/></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </group>
+                                </page>
+                        </notebook>
+                 </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+</odoo>
+

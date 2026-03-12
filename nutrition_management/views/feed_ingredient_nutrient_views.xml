@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Feed Ingredient Nutrient List View -->
+    <record id="view_feed_ingredient_nutrient_list" model="ir.ui.view">
+        <field name="name">feed.ingredient.nutrient.list</field>
+        <field name="model">feed.ingredient.nutrient</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="ingredient_id"/>
+                <field name="nutrition_id"/>
+                <field name="percentage_per_100kg"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Feed Ingredient Nutrient Form View -->
+    <record id="view_feed_ingredient_nutrient_form" model="ir.ui.view">
+        <field name="name">feed.ingredient.nutrient.form</field>
+        <field name="model">feed.ingredient.nutrient</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="ingredient_id" readonly="1"/>
+                        <field name="nutrition_id"/>
+                        <field name="percentage_per_100kg"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

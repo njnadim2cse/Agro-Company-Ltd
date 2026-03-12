@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Ingredient Details Report Template -->
+    <template id="report_ingredient_details">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <t t-set="doc" t-value="docs[0]"/>
+                <div class="page">
+                    <h2>Ingredients Details Report</h2>
+                    <h3>Formula: <t t-esc="doc.name"/></h3>
+                    <p>Poultry Type: <t t-esc="doc.poultry_type"/></p>
+                    <p>Age Range: <t t-esc="doc.age_from"/> to <t t-esc="doc.age_to"/> <t t-esc="doc.date_type"/></p>
+                    <p>Batch Size: <t t-esc="doc.actual_batch_size"/> kg</p>
+
+                    <h4>Ingredients Cost Summary (per 100kg)</h4>
+                    <table class="table table-bordered" style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background-color: #f8f9fa;">
+                                <th style="border: 1px solid #dee2e6; padding: 8px; text-align: left;">Ingredient</th>
+                                <th style="border: 1px solid #dee2e6; padding: 8px; text-align: right;">Quantity per 100kg</th>
+                                <th style="border: 1px solid #dee2e6; padding: 8px; text-align: right;">Unit Cost</th>
+                                <th style="border: 1px solid #dee2e6; padding: 8px; text-align: right;">Cost per 100kg</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="doc.ingredient_observation_ids" t-as="ingredient">
+                                <tr>
+                                    <td style="border: 1px solid #dee2e6; padding: 8px;"><t t-esc="ingredient.ingredient_id.display_name"/></td>
+                                    <td style="border: 1px solid #dee2e6; padding: 8px; text-align: right;"><t t-esc="'%.6f' % ingredient.quantity_per_100kg"/></td>
+                                    <td style="border: 1px solid #dee2e6; padding: 8px; text-align: right;"><t t-esc="'%.2f' % ingredient.unit_cost"/></td>
+                                    <td style="border: 1px solid #dee2e6; padding: 8px; text-align: right;"><t t-esc="'%.2f' % ingredient.cost_per_100kg"/></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                        <tfoot>
+                            <tr style="background-color: #f8f9fa; font-weight: bold;">
+                                <td colspan="3" style="border: 1px solid #dee2e6; padding: 8px; text-align: right;">Total Cost per 100kg:</td>
+                                <td style="border: 1px solid #dee2e6; padding: 8px; text-align: right;"><t t-esc="'%.2f' % doc.total_cost_per_100kg"/></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <!-- Nutrient Details Report Template -->
+    <template id="report_nutrient_details">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <t t-set="doc" t-value="docs[0]"/>
+                <div class="page">
+                    <h2>Nutrients Details Report</h2>
+                    <h3>Formula: <t t-esc="doc.name"/></h3>
+                    <p>Poultry Type: <t t-esc="doc.poultry_type"/></p>
+                    <p>Age Range: <t t-esc="doc.age_from"/> to <t t-esc="doc.age_to"/> <t t-esc="doc.date_type"/></p>
+                    <p>Batch Size: <t t-esc="doc.actual_batch_size"/> kg</p>
+
+                    <h4>Detailed Nutrient Breakdown (per 100kg)</h4>
+                    <table class="table table-bordered" style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background-color: #f8f9fa;">
+                                <th style="border: 1px solid #dee2e6; padding: 8px; text-align: left;">Nutrient</th>
+                                <th style="border: 1px solid #dee2e6; padding: 8px; text-align: left;">Ingredient</th>
+                                <th style="border: 1px solid #dee2e6; padding: 8px; text-align: right;">Percentage per 100kg</th>
+                                <th style="border: 1px solid #dee2e6; padding: 8px; text-align: right;">Total Percentage per 100kg</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="doc.nutrient_observation_ids" t-as="nutrient">
+                                <tr>
+                                    <td style="border: 1px solid #dee2e6; padding: 8px;"><t t-esc="nutrient.nutrition_id.name"/></td>
+                                    <td style="border: 1px solid #dee2e6; padding: 8px;"><t t-esc="nutrient.ingredient_id.display_name"/></td>
+                                    <td style="border: 1px solid #dee2e6; padding: 8px; text-align: right;"><t t-esc="'%.6f' % nutrient.percentage_per_100kg"/></td>
+                                    <td style="border: 1px solid #dee2e6; padding: 8px; text-align: right;"><t t-esc="'%.6f' % nutrient.total_percentage_per_100kg"/></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <!-- Total Nutrient Summary Report Template -->
+    <template id="report_nutrient_summary">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <t t-set="doc" t-value="docs[0]"/>
+                <div class="page">
+                    <h2>Total Nutrients Summary Report</h2>
+                    <h3>Formula: <t t-esc="doc.name"/></h3>
+                    <p>Poultry Type: <t t-esc="doc.poultry_type"/></p>
+                    <p>Age Range: <t t-esc="doc.age_from"/> to <t t-esc="doc.age_to"/> <t t-esc="doc.date_type"/></p>
+                    <p>Batch Size: <t t-esc="doc.actual_batch_size"/> kg</p>
+                    <p>Nutrition Status: 
+                        <span t-if="doc.nutrition_status == 'satisfied'" style="color: green; font-weight: bold;">Satisfied</span>
+                        <span t-if="doc.nutrition_status == 'unsatisfied'" style="color: red; font-weight: bold;">Unsatisfied</span>
+                    </p>
+
+                    <h4>Total Nutrient Summary (per 100kg)</h4>
+                    <table class="table table-bordered" style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background-color: #f8f9fa;">
+                                <th style="border: 1px solid #dee2e6; padding: 8px; text-align: left;">Nutrient</th>
+                                <th style="border: 1px solid #dee2e6; padding: 8px; text-align: right;">Min Standard</th>
+                                <th style="border: 1px solid #dee2e6; padding: 8px; text-align: right;">Max Standard</th>
+                                <th style="border: 1px solid #dee2e6; padding: 8px; text-align: right;">Required Standard</th>
+                                <th style="border: 1px solid #dee2e6; padding: 8px; text-align: right;">Actual Used (%)</th>
+                                <th style="border: 1px solid #dee2e6; padding: 8px; text-align: center;">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="doc.total_nutrient_summary_ids" t-as="nutrient">
+                                <tr>
+                                    <td style="border: 1px solid #dee2e6; padding: 8px;"><t t-esc="nutrient.nutrition_id.name"/></td>
+                                    <td style="border: 1px solid #dee2e6; padding: 8px; text-align: right;">
+                                        <t t-if="nutrient.min_standard">
+                                            <t t-esc="'%.6f' % nutrient.min_standard"/>
+                                        </t>
+                                        <t t-else="">-</t>
+                                    </td>
+                                    <td style="border: 1px solid #dee2e6; padding: 8px; text-align: right;">
+                                        <t t-if="nutrient.max_standard">
+                                            <t t-esc="'%.6f' % nutrient.max_standard"/>
+                                        </t>
+                                        <t t-else="">-</t>
+                                    </td>
+                                    <td style="border: 1px solid #dee2e6; padding: 8px; text-align: right;">
+                                        <t t-if="nutrient.required_standard">
+                                            <t t-esc="'%.6f' % nutrient.required_standard"/>
+                                        </t>
+                                        <t t-else="">-</t>
+                                    </td>
+                                    <td style="border: 1px solid #dee2e6; padding: 8px; text-align: right;"><t t-esc="'%.6f' % nutrient.actual_used_percent"/></td>
+                                    <td style="border: 1px solid #dee2e6; padding: 8px; text-align: center;">
+                                        <t t-if="nutrient.status == 'no_standard'">
+                                            <span style="color: gray;">No Standard</span>
+                                        </t>
+                                        <t t-elif="nutrient.status == 'within_range'">
+                                            <span style="color: green;">Within Range</span>
+                                        </t>
+                                        <t t-elif="nutrient.status == 'below_min'">
+                                            <span style="color: orange;">Below Minimum</span>
+                                        </t>
+                                        <t t-elif="nutrient.status == 'above_max'">
+                                            <span style="color: red;">Above Maximum</span>
+                                        </t>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                    
+                    <!-- Status Legend -->
+                    <div style="margin-top: 20px; padding: 10px; background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 5px;">
+                        <strong>Status Legend:</strong>
+                        <span style="display: inline-block; margin-left: 10px; padding: 2px 8px; background-color: #e9ecef; border-radius: 3px;">No Standard</span> - No min/max standard defined,
+                        <span style="display: inline-block; margin-left: 10px; padding: 2px 8px; background-color: #d4edda; color: #155724; border-radius: 3px;">Within Range</span> - Between min and max standards (Satisfied),
+                        <span style="display: inline-block; margin-left: 10px; padding: 2px 8px; background-color: #fff3cd; color: #856404; border-radius: 3px;">Below Minimum</span> - Below min standard (Unsatisfied),
+                        <span style="display: inline-block; margin-left: 10px; padding: 2px 8px; background-color: #f8d7da; color: #721c24; border-radius: 3px;">Above Maximum</span> - Exceeds max standard (Unsatisfied)
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,178 @@
+<odoo>
+    <!-- ============================= -->
+    <!-- ACTIONS                       -->
+    <!-- ============================= -->
+
+    <!-- Chicken Egg Distribution Action -->
+    <record id="action_chicken_egg_distribution" model="ir.actions.act_window">
+        <field name="name">Chicken Egg Distribution</field>
+        <field name="res_model">chicken.egg.distribution</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first Chicken Egg Distribution record.
+            </p>
+        </field>
+    </record>
+
+    <!-- Sale Orders Related to Distribution -->
+    <record id="action_sale_orders_from_distribution" model="ir.actions.act_window">
+        <field name="name">Related Sale Orders</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('distribution_id', '=', active_id)]</field>
+    </record>
+
+    <!-- ============================= -->
+    <!-- MENU ITEMS                     -->
+    <!-- ============================= -->
+
+  
+
+    <menuitem id="menu_external_transfer"
+              name="External Transfers"
+              parent="menu_chicken_egg_distribution"
+              sequence="20"
+              action="action_chicken_egg_distribution"/>
+
+    <!-- ============================= -->
+    <!-- VIEWS                           -->
+    <!-- ============================= -->
+
+    <!-- List View: Distribution -->
+    <record id="view_chicken_egg_distribution_list" model="ir.ui.view">
+        <field name="name">chicken.egg.distribution.list</field>
+        <field name="model">chicken.egg.distribution</field>
+        <field name="arch" type="xml">
+            <list string="Chicken Egg Distributions">
+                <field name="name"/>
+                <field name="product_id"/>
+                <field name="farm_id"/>
+                <field name="user_id"/>
+                <field name="parent_transfer_qty"/>
+                <field name="remaining_qty"/>
+                <field name="states"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View: Distribution -->
+    <record id="view_chicken_egg_distribution_form" model="ir.ui.view">
+        <field name="name">chicken.egg.distribution.form</field>
+        <field name="model">chicken.egg.distribution</field>
+        <field name="arch" type="xml">
+            <form string="Chicken Egg Distribution">
+                <header>
+                    
+                    <button name="button_approve" type="object" string="Approve" class="btn-success" icon="fa-thumbs-up"/>
+                    <field name="states" widget="statusbar" statusbar_visible="approve,sale_order"/>
+                </header>
+
+              
+
+                <sheet>
+                  <div class="oe_button_box" name="button_box">
+                    <button name="%(action_sale_orders_from_distribution)d" type="action" class="oe_stat_button" icon="fa-truck" string="Sale Orders"/>
+                  </div>
+                    <div>
+                    <h1>
+                       <field name="name" readonly="1"/>
+                    </h1>
+                   </div>
+
+                    <group>
+                        <group>
+                            <field name="product_id"/>
+                            <field name="farm_id"/>
+                        </group>
+                        <group>
+                            <field name="user_id" readonly="1"/>
+                            <field name="parent_transfer_qty" readonly="1"/>
+                            <field name="remaining_qty" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Distribution Lines">
+                            <field name="distribution_line_ids">
+                                <list editable="bottom" string="Distribution Lines">
+                                    <field name="customer_id"/>
+                                    <field name="cus_qty"/>
+                                    <field name="done_qty"/>
+                                    <field name="price"/>
+                                    <field name="sale_order_id" readonly="1"/>
+                                    <button name="button_create_sale_order" type="object" string="Create Sale Order" class="btn-secondary" icon="fa-shopping-cart"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- List View: Distribution Line -->
+    <record id="view_chicken_egg_distribution_line_list" model="ir.ui.view">
+        <field name="name">chicken.egg.distribution.line.list</field>
+        <field name="model">chicken.egg.distribution.line</field>
+        <field name="arch" type="xml">
+            <list string="Distribution Lines">
+                <field name="distribution_id"/>
+                <field name="customer_id"/>
+                <field name="cus_qty"/>
+                <field name="done_qty"/>
+                <field name="price"/>
+                <field name="sale_order_id"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View: Distribution Line -->
+    <record id="view_chicken_egg_distribution_line_form" model="ir.ui.view">
+        <field name="name">chicken.egg.distribution.line.form</field>
+        <field name="model">chicken.egg.distribution.line</field>
+        <field name="arch" type="xml">
+            <form string="Distribution Line">
+                <sheet>
+                    <group>
+                        <field name="distribution_id" readonly="1"/>
+                        <field name="customer_id"/>
+                        <field name="cus_qty"/>
+                        <field name="done_qty" readonly="1"/>
+                        <field name="price"/>
+                        <field name="sale_order_id" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Inherit Sale Order Tree -->
+    <record id="view_sale_order_tree_inherit_hatchery" model="ir.ui.view">
+        <field name="name">sale.order.tree.inherit.hatchery</field>
+        <field name="model">sale.order</field>
+       <field name="inherit_id" ref="sale.view_order_tree"/>
+        <field name="arch" type="xml">
+        <xpath expr="//field[@name='partner_id']" position="after">
+            <field name="distribution_id"/>
+        </xpath>
+    </field>
+</record>
+
+
+    <!-- Inherit Sale Order Form -->
+    <record id="view_sale_order_form_inherit_hatchery" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.hatchery</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/group/group" position="inside">
+                <field name="distribution_id" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
+
+

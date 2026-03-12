@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_feed_nutrition,feed.nutrition,model_feed_nutrition,,1,1,1,1
+access_feed_ingredient,feed.ingredient,model_feed_ingredient,,1,1,1,1
+access_feed_ingredient_nutrient,feed.ingredient.nutrient,model_feed_ingredient_nutrient,,1,1,1,1
+access_feed_formula,feed.formula,model_feed_formula,,1,1,1,1
+access_feed_formula_ingredient_obs,feed.formula.ingredient.observation,model_feed_formula_ingredient_observation,,1,1,1,1
+access_feed_formula_nutrient_obs,feed.formula.nutrient.observation,model_feed_formula_nutrient_observation,,1,1,1,1
+access_feed_formula_nutrient_summary,feed.formula.nutrient.summary,model_feed_formula_nutrient_summary,,1,1,1,1
+access_nutrition_standard,feed.nutrition.standard,model_feed_nutrition_standard,,1,1,1,1
+access_nutrition_report_wizard,nutrition.report.wizard,model_nutrition_report_wizard,,1,1,1,1
+access_nutrition_check_wizard,nutrition.check.wizard,model_nutrition_check_wizard,,1,1,1,1

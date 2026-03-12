@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="action_farm_boy_request" model="ir.actions.act_window">
+        <field name="name">Farm Boy Requests</field>
+        <field name="res_model">farm.boy.request.data</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first Farm Boy Request
+            </p>
+        </field>
+    </record>
+
+    <record id="view_farm_boy_request_tree" model="ir.ui.view">
+        <field name="name">farm.boy.request.data.list</field>
+        <field name="model">farm.boy.request.data</field>
+        
+        <field name="arch" type="xml">
+            <list string="Farm Boy Requests" decoration-info="state == 'draft'" decoration-success="state == 'requested'" >
+                <field name="date" width="100"/>
+                <field name="name" width="100" />
+                <field name="created_by" widget="many2one_avatar_user" width="120"/>
+               <field name="state" width="100" widget="badge" 
+                                            decoration-success="state == 'approved'" 
+                                            decoration-info="state == 'requested'"
+                                            decoration-warning="state == 'draft'"
+                                            decoration-danger="state == 'refused'"/>
+                <field name="flock_id" width="100" />
+                </list>
+        </field>
+    </record>
+    
+    <record id="view_farm_boy_request_form" model="ir.ui.view">
+        <field name="name">farm.boy.request.data.form</field>
+        <field name="model">farm.boy.request.data</field>
+        <field name="arch" type="xml">
+            <form string="Farm Boy Request">
+                <header>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,requested,approved,rejected"/>
+                        <button name="action_confirm" string="Submit Request" class="oe_highlight" type="object"  icon="fa-paper-plane" invisible="state != 'draft'"/>
+                        <button name="action_draft" string="Reset to Draft" type="object" icon="fa-undo" decoration-warning="state == 'requested'" invisible="state != 'requested'"/>
+                </header>
+                <sheet>
+                    <div>
+                        <h1><field name="name" readonly="1"/></h1>
+                        <field name="date"/>
+                    </div>
+                        <group string="Medicine Request Details">
+                            <field name="requested_by" string="Requested By:" readonly="state != 'draft' "/>
+                            <field name="flock_id" readonly="state != 'draft' " />
+                            <field name="bird_type" readonly="state != 'draft' "/>
+                            <field name="current_birds" readonly="state != 'draft' "/>
+                            <field name="current_age_display" readonly="state != 'draft' "/>
+                        </group>
+                      <notebook>
+                        <page string="Requested Lines">
+                            <field name="farmboy_request_line_ids">
+                                <list editable="bottom" decoration-info="state == 'draft'" decoration-success="state == 'requested'">
+                                    <field name="product_id" width="150" readonly="1"/>
+                                    <field name="total_dose" width="120" readonly="1"/>
+                                    <field name="consume_quantity" width="120" readonly="1"/>
+                                    <field name="total_cost" width="120" readonly="1"/>
+                                    <field name="state" width="100" widget="badge" 
+                                            decoration-success="state == 'approved'" 
+                                            decoration-info="state == 'requested'"
+                                            decoration-warning="state == 'draft'"
+                                            decoration-danger="state == 'refused'"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <!-- <menuitem id="menu_farm_boy_request_root" name="Farm Boy Requests" parent="menu_layer_flock_root" sequence="210" action="action_farm_boy_request"/> -->
+</odoo>

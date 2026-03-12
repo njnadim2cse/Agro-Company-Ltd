@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <menuitem id="farm_management_root" name="Layer Farm" sequence="12"/>
+   
+    <menuitem id="menu_farm_management_configuration_root"
+                  name="Farm"
+                  parent="farm_management_root"
+                  sequence="13"/>
+    <menuitem id="menu_mortality_root" name="Bird Mortality"
+       parent="menu_farm_management_configuration_root" action="action_mortality_detail" />
+
+    <menuitem id="menu_feed_details" 
+        name="Feed Intake" parent="menu_farm_management_configuration_root" 
+        action="action_feed_details"/>
+    <menuitem id="menu_farm_water_intake"
+     name="Water Intake" 
+     parent="menu_farm_management_configuration_root" 
+     action="action_farm_water_intake"/>
+
+    <menuitem id="menu_flock_body_weight"
+     name="Body Weight" parent="menu_farm_management_configuration_root" 
+     action="action_flock_body_weight"/>
+    
+    <menuitem id="menu_template_configuration_root"
+                  name="Temperature"
+                  parent="farm_management_root"
+                  sequence="14"/>
+    <menuitem id="menu_farm_temperature_root" name="Suggest Medicine Manually"
+     parent="menu_template_configuration_root"
+     action="action_farm_temperature"/> 
+    <menuitem id="menu_temperature_details_root"
+       name="Suggest Medicine By live temp"
+       parent="menu_template_configuration_root"
+       action="action_temperature_details_data"/>
+       
+       <menuitem id="menu_menual_temperature_entry"
+                  name="Manual Temp Entry"
+                  parent="menu_template_configuration_root"
+                  action="action_menual_temperature_entry"/>
+  
+       <menuitem id="menu_medicinerequest_configuration_root"
+                  name="Medicine Request"
+                  parent="farm_management_root"
+                  sequence="15"/>
+        <menuitem id="menu_farm_boy_request_root" 
+        name="Requests" parent="menu_medicinerequest_configuration_root"
+         action="action_farm_boy_request"/>
+        
+        <menuitem id="menu_configuration_root"
+                  name="Configuration"
+                  parent="farm_management_root"
+                  sequence="17"/>
+        <menuitem id="menu_layer_flock_dashboard" name="Flocks Setup" parent="menu_configuration_root" action="action_layer_flock_dashboard"/>
+        <menuitem id="menu_add_medicine_by_live_temp_root"
+            name="Medicine Template" 
+            parent="menu_configuration_root" 
+            action="action_add_medicine_by_live_temp"/>
+          <menuitem id="menu_ventilation_farm_details"
+                     name="Farm Vantilation"
+                     parent="menu_configuration_root"
+                     action="action_ventilation_farm_details"/>
+         <menuitem id="menu_farm_production_root" name="Egg Production" parent="farm_management_root" sequence="16" action="action_farm_production_details"/>
+  
+          <menuitem id="menu_ventilation_fans" name="Fan Setup" parent="menu_configuration_root" action="action_ventilation_fan"/>
+           <menuitem id="menu_ventilation_levels" name="Ventilation Levels"  parent="menu_configuration_root" action="action_ventilation_level"/>
+
+</odoo>

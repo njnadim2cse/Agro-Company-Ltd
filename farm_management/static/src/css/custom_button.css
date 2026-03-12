@@ -1,0 +1,10 @@
+.btn-light-success {
+    background-color: #e6ffea !important;  /* light green */
+    border-color: #4863A0 !important;
+    color: #4863A0 !important;             /* dark green text */
+}
+
+.btn-light-success:hover {
+    background-color: #87CEFA !important;  /* slightly darker on hover */
+    border-color: #87CEFA !important;
+}

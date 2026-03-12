@@ -1,0 +1,101 @@
+<odoo>
+    <!-- ============================= -->
+    <!--  ACTION                      -->
+    <!-- ============================= -->
+    <record id="action_chick_packaging" model="ir.actions.act_window">
+        <field name="name">Chick Packaging</field>
+        <field name="res_model">chick.packaging</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first Chick Packaging record.
+            </p>
+        </field>
+    </record>
+
+    <!-- ============================= -->
+    <!--  MENU                        -->
+    <!-- ============================= -->
+    <menuitem id="menu_chick_packaging_root"
+              name="Chick Packaging"
+              parent="menu_hatchery_management"
+              sequence="40" action="action_chick_packaging"/>
+
+    <!-- ============================= -->
+    <!--  LIST VIEW                   -->
+    <!-- ============================= -->
+    <record id="view_chick_packaging_list" model="ir.ui.view">
+        <field name="name">chick.packaging.list</field>
+        <field name="model">chick.packaging</field>
+        <field name="arch" type="xml">
+            <list string="Chick Packaging">
+                <field name="name" readonly="1"/>
+                <field name="hatcher_stage_id"/>
+                <field name="chicks_count"/>
+                <field name="boxes_count"/>
+                <field name="available_chicks"/>
+                <field name="boxes_after_mortality"/>
+                <field name="packaging_mortality"/>
+                <field name="stock_scrap_id"/>
+                <field name="transfer_id"/>
+                <field name="distribution_id"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ============================= -->
+    <!--  FORM VIEW                   -->
+    <!-- ============================= -->
+    <record id="view_chick_packaging_form" model="ir.ui.view">
+        <field name="name">chick.packaging.form</field>
+        <field name="model">chick.packaging</field>
+        <field name="arch" type="xml">
+            <form string="Chick Packaging">
+                <!-- HEADER -->
+                <header>
+                    <button name="action_ready_for_transfer" type="object" string="Ready for Transfer" class="btn-primary" icon="fa-arrow-right"/>
+                    <button name="action_done" type="object" string="Done" class="btn-success" icon="fa-check"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,ready_for_transfer,done"/>
+                </header>
+        <sheet>
+     <!-- SMART BUTTONS -->
+            
+                       
+                <h1>
+                       <field name="name" readonly="1"/>
+                 </h1>
+                <!-- FORM BODY -->
+            
+                    <group>
+                        <group>
+                            
+                            <field name="hatcher_stage_id"/>
+                            <field name="chicks_count"/>
+                            <field name="boxes_count" readonly="1"/>
+                            <field name="available_chicks"/>
+                            <field name="boxes_after_mortality"/>
+                            <field name="transfer_type" />
+                        </group>
+                        <group>
+                            <field name="packaging_mortality"/>
+                            <field name="stock_scrap_id"/>
+                            <field name="transfer_id" readonly="1" options="{'no_create': True}"/>
+                            <field name="distribution_id" readonly="1" options="{'no_create': True}"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Notes">
+                            <field name="note"  widget="html"/>
+                        </page>
+                    </notebook>
+                </sheet>
+
+                <chatter/>
+            </form>
+        </field>
+    </record>
+</odoo>
+
+

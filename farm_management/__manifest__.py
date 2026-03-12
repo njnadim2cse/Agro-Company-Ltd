@@ -1,0 +1,56 @@
+{
+
+    'name': 'farm_management',
+    'version': '1.0',
+    'summary': 'Manage Layer Farm Operations',
+    'description': 'Layer Farm Management Module for Poultry Farms',
+    'category': 'Agro Modules',
+    'author': 'Afzal Khan',
+    'license': 'LGPL-3',
+    'depends': ['base', 'stock', 'sale', 'purchase', 'mail', 'agro_core'],
+    
+    'data': [
+        'security/ir.model.access.csv',
+        'views/flock_views.xml',
+        'views/mortality_details_views.xml',
+        'views/productiondetails.xml',
+        'views/farm_temperature_views.xml',
+        'views/feed_details.xml',
+        'views/water_intake_views.xml',
+        'views/medicine_entry.xml',
+        'views/suggest_medicine_by_temp.xml',
+        'views/farm_boy_requests.xml',
+        'views/body_weight_views.xml',
+        'views/producttemplateinherit.xml',
+        'views/dashboard_menu.xml',
+        'views/menual_temp_entry.xml',
+        'views/ventilation_fans_views.xml',
+        'views/ventilation_level_views.xml',
+        'views/ventilation_details_views.xml',
+        'views/open_level_views.xml',
+        'views/menu_views.xml',
+        'data/seq_mortality_details.xml',
+        'data/seq_production_details.xml',
+        'data/seq_temperature.xml',
+        'data/seq_flock_details.xml',
+        'data/ir_cron.xml',
+    ],
+
+    'assets': {
+        'web.assets_backend': [
+            '/farm_management/static/src/scss/custom_variables.scss',
+            '/farm_management/static/src/css/custom_button.css',  
+            "/farm_management/static/src/css/dashboard.css",      
+            "/farm_management/static/src/js/dashboard.js",        
+            "/farm_management/static/src/xml/dashboard_template.xml",  
+            "https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js",  
+            "https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap",  
+        ],
+    },
+
+    'demo': [],
+    'application': True,
+    'installable': True,
+    'auto_install': False,
+
+}

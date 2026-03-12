@@ -1,0 +1,17 @@
+
+<odoo>
+  <record id="view_company_form_agro" model="ir.ui.view">
+    <field name="name">res.company.form.agro</field>
+    <field name="model">res.company</field>
+    <field name="inherit_id" ref="base.view_company_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//sheet/notebook" position="inside">
+        <page string="Agro Modules">
+          <group>
+            <field name="enable_gate_pass"/>
+          </group>
+        </page>
+      </xpath>
+    </field>
+  </record>
+</odoo>

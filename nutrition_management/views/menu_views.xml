@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Root Menu -->
+    <menuitem id="menu_nutrition_root" name="Nutrition Management" sequence="11"/>
+
+    <!-- Sub Menus -->
+    <menuitem id="menu_nutrition_master" name="Nutritions"
+              parent="menu_nutrition_root"
+              action="nutrition_management.action_feed_nutrition"
+              sequence="1"/>
+    <menuitem id="menu_nutrition_standards" name="Nutrition Standards"
+              parent="menu_nutrition_root"
+              action="nutrition_management.action_feed_nutrition_standard"
+              sequence="2"/>
+
+    <menuitem id="menu_nutrition_ingredients" name="Ingredients"
+              parent="menu_nutrition_root"
+              action="nutrition_management.action_feed_ingredient"
+              sequence="3"/>
+
+    <menuitem id="menu_nutrition_formulas" name="Formulas"
+              parent="menu_nutrition_root"
+              action="nutrition_management.action_feed_formula"
+              sequence="4"/>
+
+    <menuitem id="menu_nutrition_reports" name="Reports"
+              parent="menu_nutrition_root"
+              action="nutrition_management.action_nutrition_reports_wizard"
+              sequence="5"/>
+</odoo>
+
+

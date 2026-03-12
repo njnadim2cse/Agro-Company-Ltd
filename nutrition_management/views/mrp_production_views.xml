@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Manufacturing Order Form View Extension -->
+    <record id="view_mrp_production_form_inherit_nutrition" model="ir.ui.view">
+        <field name="name">mrp.production.form.inherit.nutrition</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+        <field name="arch" type="xml">
+            
+            <!-- Place formula_id and nutrition_status under user_id (Responsible) -->
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="formula_id" 
+                       readonly="1" />
+                <field name="nutrition_status" 
+                       widget="selection_badge"
+                       readonly="1"
+                       options="{'colors': {'satisfied': 'success', 'unsatisfied': 'danger'}}"/>
+            </xpath>
+            
+            <!-- Add Check Nutrition button -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_check_nutrition" 
+                        type="object" 
+                        string="Check Nutrition" 
+                        class="oe_stat_button" 
+                        icon="fa-flask"
+                        invisible="not formula_id"/>
+            </xpath>
+            
+        </field>
+    </record>
+</odoo>

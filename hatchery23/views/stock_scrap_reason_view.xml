@@ -1,0 +1,20 @@
+<odoo>
+    <record id="view_stock_scrap_form_custom" model="ir.ui.view">
+        <field name="name">stock.scrap.form.custom</field>
+        <field name="model">stock.scrap</field>
+        <field name="arch" type="xml">
+            <form string="Scrap">
+                <sheet>
+                    <group>
+                        <field name="product_id"/>
+                        <field name="scrap_qty"/>
+                        <field name="location_id"/>
+                        <field name="scrap_reason_tag_ids" widget="many2many_tags" string="Scrap Reason"/>
+                        <field name="date_done"/>
+                        <field name="company_id"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

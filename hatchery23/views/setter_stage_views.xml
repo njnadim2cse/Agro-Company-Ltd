@@ -1,0 +1,122 @@
+
+<odoo>
+    <!-- Action -->
+    <record id="action_setter_stage" model="ir.actions.act_window">
+        <field name="name">Setter Stages</field>
+        <field name="res_model">hatchery.setter.stage</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{}</field> 
+   
+    </record>
+
+    <!-- Menu -->
+     <menuitem id="menu_setter_stage_root" name="Setter Stage" parent="menu_hatchery_management" sequence="20"  action="action_setter_stage"/>
+
+    <!-- List View -->
+    <record id="view_setter_stage_tree" model="ir.ui.view">
+        <field name="name">setter.stage.list</field>
+        <field name="model">hatchery.setter.stage</field>
+        <field name="type">list</field> 
+        <field name="arch" type="xml">
+            <list>
+                <field name="name" readonly="1"/>
+                <field name="batch_id"/>
+                <field name="machine_id" options="{'no_create': True}"/>
+                <field name="quantity_loaded"/>
+                <field name="qty_available"/>
+                <field name="total_broken"/>
+                <field name="start_date"/>
+                <field name="end_date"/> 
+                <field name="success_rate"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_setter_stage_form" model="ir.ui.view">
+        <field name="name">setter.stage.form</field>
+        <field name="model">hatchery.setter.stage</field>
+        <field name="arch" type="xml">
+            <form string="Setter Stage">
+                <header>
+                    <!-- Button: Move to Hatcher -->
+                    <button name="action_move_to_hatcher"
+                            type="object"
+                            string="Move to Hatcher"
+                            class="btn-primary" icon="fa-arrow-right"/>
+                    <!-- Button: Done -->
+                    <button name="action_done"
+                            type="object"
+                            string="Done"
+                            class="btn-success" icon="fa-check"/>
+                    <!-- Status Bar -->
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="in_setter,ready_for_hatcher,done"/>
+                </header>
+                <sheet>
+                    <h1>
+                       <field name="name" readonly="1"/>
+                    </h1>
+                    <group>
+                        <group>
+                        
+                            <field name="batch_id"/>
+                            <field name="machine_id" options="{'no_create': True}"/>
+                            <field name="start_date"/>
+                            <field name="end_date"/>  
+                        </group>
+                        
+                        <group>
+                            <field name="qty_available"/>
+                            <field name="total_broken"/>
+                            <field name="quantity_loaded"/>
+                            <field name="success_rate" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                  
+                        <!-- Materials Tab -->
+                       
+                        <!-- Temperature Tab -->
+                        <page string="Temperature">
+                            <field name="temperature_ids">
+                                <list editable="bottom">
+                                    <field name="date"/>
+                                    <field name="min_temp"/>
+                                    <field name="max_temp"/>
+                                    <field name="avg_temp"/>
+                                    <field name="humidity"/>
+                                    <field name="user_id"/>
+                                </list>
+                            </field>
+                        </page>
+                    
+
+                        <!-- Setter Break History -->
+                        <page string="Setter Break History">
+                            <field name="setter_break_line_ids">
+                                <list editable="bottom">
+                                    <field name="date" readonly="1"/>
+                                    <field name="break_qty"/>
+                                    <field name="break_reason"/>
+                                    <field name="note"/>
+                                    <field name="user_id" readonly="1"/>
+                                    <field name="stock_scrap_id"/>
+                                    <field name="processed" readonly="1"/>
+                                    <button name="action_break_eggs" 
+                                            type="object" 
+                                            string="Egg Breakage"
+                                            class="btn btn-light-red btn-sm" 
+                                            icon="fa-exclamation-triangle" invisible ="processed != False"/>
+                                </list>
+                            </field>
+                        </page>
+                         
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+</odoo>

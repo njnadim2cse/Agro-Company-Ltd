@@ -1,0 +1,40 @@
+<!-- farm_medicine_approval/views/farm_medicine_rejection_wizard_views.xml -->
+
+<odoo>
+    
+        <!-- Rejection Wizard Form View -->
+        <record id="view_farm_medicine_rejection_wizard_form" model="ir.ui.view">
+            <field name="name">farm.medicine.rejection.wizard.form</field>
+            <field name="model">farm.medicine.rejection.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Reject Medicine Request">
+                    <sheet>
+                        <div class="alert alert-warning" role="alert">
+                            <strong>⚠️ You are about to reject this medicine request.</strong>
+                            <br/>
+                            Please provide a reason for rejection below. This reason will be visible to the farm boy.
+                        </div>
+                        
+                        <group>
+                            <field name="approval_id" invisible="1"/>
+                            <field name="rejection_reason" string="Rejection Reason" nolabel="1" 
+                                   placeholder="Please explain why this request is being rejected..."/>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name="action_confirm_rejection" string="Confirm Rejection" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- Action for Rejection Wizard -->
+        <record id="action_farm_medicine_rejection_wizard" model="ir.actions.act_window">
+            <field name="name">Reject Medicine Request</field>
+            <field name="res_model">farm.medicine.rejection.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+   
+</odoo>

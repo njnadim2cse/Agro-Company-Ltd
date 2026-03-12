@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_temperature_details_data_tree" model="ir.ui.view">
+            <field name="name">temperature.details.data.list</field>
+            <field name="model">temperature.details.data</field>
+            <field name="arch" type="xml">
+               <list string="Live Temperature Data" create="true" delete="true" default_order="date desc" 
+                    decoration-info="state == 'draft'" decoration-success="state == 'done'">
+                    <field name="date" readonly="1" width="50"/>
+                    <field name="name" width="100" invisible="state == 'draft'"/>
+                    <field name="created_by" widget="many2one_avatar_user" width="120"/>
+                    <field name="state" widget="badge" decoration-success="state=='done'" decoration-warning="state=='draft'" width="120"/>
+                    <field name="City" width="120"/>
+                    <field name="temp_instant" width="80" string="Current Temp"/>
+                </list>
+            </field>
+    </record>
+
+    <record id="view_temperature_details_data_form" model="ir.ui.view">
+        <field name="name">temperature.details.data.form</field>
+        <field name="model">temperature.details.data</field>
+        <field name="arch" type="xml">
+    <form string="Live Temperature Data">
+
+        <header>
+                <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+                <button name="action_confirm" string="Confirm" class="oe_highlight" type="object" icon="fa-check" invisible="state != 'draft'"/>
+                <button name="action_draft" string="Return to Draft" type="object" icon="fa-undo" class="btn-secondary" invisible="state != 'done'"/>
+        </header>
+
+     <sheet>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center">
+                
+                <div>
+                <h1><field name="name" readonly="1"/></h1>
+                  <field name="date" readonly="1"/>
+                </div>
+
+                <div class="col-6 d-flex justify-content-end align-items-center gap-3">
+                <button name="action_fetch_live_temperature" type="object" string="Get Temperature"  class="btn-primary" invisible="state != 'draft'"/>
+                <button name="action_view_dashboard" type="object" string="View Dashboard" class="btn-light-success" />     
+
+               </div>
+            </div> 
+            </div>
+        </div>
+
+    <group>
+
+         <group string="Flock Information">
+            <field name="flock_id"/>
+            <field name="birds_type"/>
+            <field name="current_birds"/>
+            <field name="age_in_days"/>
+            <field name="age_in_weeks"/>
+        </group>
+
+        <group>
+        <group string="Weather's Today">
+                <field name="temp_instant" string="Instant Temp" />
+                <field name="temp_max" string="Max Temp"/>
+                <field name="temp_min" string="Min Temp"/>
+        </group>
+        </group>
+    </group>
+         <notebook>
+         <page string="Suggested Medicine">
+        <field name="suggested_medicine_line_ids">
+            <list string="Medicine Lines" editable="bottom"  decoration-info="state == 'draft'" decoration-success="state == 'done'" >
+                <field name="product_id" readonly="state != 'draft'" width="150"/>
+                <field name="total_quantity" readonly="state != 'draft'" width="100"/>
+                <field name="consume_quantity" readonly="state != 'draft'" width="100"/>
+                <field name="cost" readonly="state != 'draft'" width="100"/>
+                <field name="state" width="10" widget="badge" decoration-success="state == 'done'" readonly="1"/>
+            </list>
+        </field>
+        </page>
+        </notebook>
+        </sheet>
+        <chatter/>
+        </form>
+        </field>
+        </record>
+        
+    <record id="action_temperature_details_data" model="ir.actions.act_window">
+        <field name="name">Live Temperature</field>
+        <field name="res_model">temperature.details.data</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <!-- <menuitem id="menu_temperature_details_root" name="Suggest Medicine By live temp"  parent="menu_layer_flock_root"  action="action_temperature_details_data" sequence="200"/> -->
+</odoo>

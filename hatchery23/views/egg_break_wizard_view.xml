@@ -1,0 +1,17 @@
+<odoo>
+    <record id="view_egg_break_wizard_form" model="ir.ui.view">
+        <field name="name">egg.break.wizard.form</field>
+        <field name="model">hatchery.egg.break.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Egg Break">
+                <group>
+                    <field name="break_qty"/>
+                </group>
+                <footer>
+                    <button string="Confirm" type="object" name="action_confirm_break" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

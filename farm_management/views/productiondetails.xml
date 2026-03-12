@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="action_farm_production_details" model="ir.actions.act_window">
+        <field name="name">Egg Production</field>
+        <field name="res_model">farm.production.details</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Record daily egg production here.
+            </p>
+        </field>
+    </record>
+    <record id="view_farm_production_details_tree" model="ir.ui.view">
+        <field name="name">farm.production.details.list</field>
+        <field name="model">farm.production.details</field>
+        <field name="arch" type="xml">
+        <list string="Production Details" decoration-info="state == 'draft'" decoration-success="state == 'done'">
+            <field name="date" readonly="1" width="50"/>
+            <field name="name" width="100" invisible="state == 'draft'"/>
+            <field name="flock_id" width="100"/>
+            <field name="created_by" widget="many2one_avatar_user" width="120"/>
+            <field name="state" widget="badge" decoration-success="state=='done'" decoration-warning="state=='draft'" width="120"/>
+            <field name="current_birds" width="100" invisible="state == 'draft'"/>
+            <field name="total_egg" width="100"/>
+            <field name="cumulative_egg" readonly="1" width="100" invisible="state == 'draft'"/>
+        </list>
+    </field>
+
+    </record>
+    <record id="view_farm_production_details_form" model="ir.ui.view">
+        <field name="name">farm.production.details.form</field>
+        <field name="model">farm.production.details</field>
+        <field name="arch" type="xml">
+            <form string="Production Details">
+                <header>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+                    <button name="action_confirm" string="Confirm" class="oe_highlight" type="object" icon="fa-check" invisible="state != 'draft'"/>
+                    <button name="action_draft" string="Reset to Draft" type="object" icon="fa-undo" class="btn-secondary" invisible="state != 'done'"/>
+                </header>
+
+                <sheet>
+                    <div>
+                        <h1>  <field name="name" readonly="1"/></h1>
+                        <field name="date" readonly="1"/>
+                    </div>
+                    <group string="Production Details">
+                        <h1><field name="flock_id"  readonly="state != 'draft' " placeholder="Select Flock" required="1" options="{'no_create': True}"/></h1>
+                        <field name="bird_type" readonly="state != 'draft' "/>
+                        <field name="current_birds" readonly="state != 'draft' "/>
+                        <field name="current_age_display" readonly="state != 'draft' "/>
+                    </group>
+
+                    <notebook>
+
+                         <page string="Daily Egg Production Entries">
+                            <field name="egg_line_ids" readonly="state != 'draft' ">
+
+                                <list string="Egg Lines" editable="bottom" decoration-info="state == 'draft'" decoration-success="state == 'done'">
+                                    <field name="date" readonly="state != 'draft'" width="100"/>
+                                    <field name="egg_type" readonly="state != 'draft'" width="120"/>
+                                    <field name="product_id" readonly="state != 'draft'" width="120" string="Egg Name"/>
+                                    <field name="value" readonly="state != 'draft'" width="120"/>
+                                    <field name="state" width="10" widget="badge" decoration-success="state == 'done'" readonly="1"/>
+                                    
+                                </list>
+
+                                <form string="Egg Line">
+                                    <sheet>
+                                    <group>
+                                        <group>
+                                            <field name="date" readonly="state != 'draft' "/>
+                                            <field name="egg_type" readonly="state != 'draft' "/>
+                                            <field name="value" readonly="state != 'draft' " string="Number of Eggs"/>
+                                            <field name="state" readonly="1"/>
+                                        </group>
+                                        
+                                    </group>
+                                    </sheet>
+                                </form>
+                            </field>
+                        </page>
+                        <page string="Daily Production Summary">
+                            <group string="Egg Category Summary">
+                                <table class="o_list_table table table-striped table-bordered table-hover">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th>Category</th>
+                                                <th>Total Eggs</th>
+                                                <th>Percentage Calculation</th>
+                                                <th>Cumulative Eggs</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Small</td>
+                                                <td><field name="total_small"/></td>
+                                                <td><field name="small_percentage" style="display:inline;"/> <span style="display:inline;">%</span></td>
+                                                <td><field name="small_cumulative"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Medium</td>
+                                                <td><field name="total_medium"/></td>
+                                                <td><field name="medium_percentage" style="display:inline;"/> <span style="display:inline;">%</span></td>
+                                                <td><field name="medium_cumulative"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td>High Medium</td>
+                                                <td><field name="total_high_medium"/></td>
+                                                <td><field name="high_medium_percentage" style="display:inline;"/> <span style="display:inline;">%</span></td>
+                                                <td><field name="high_medium_cumulative"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td>High</td>
+                                                <td><field name="total_high"/></td>
+                                                <td><field name="high_percentage" style="display:inline;"/> <span style="display:inline;">%</span></td>
+                                                <td><field name="high_cumulative"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Double Yolk</td>
+                                                <td><field name="total_double_yolk"/></td>
+                                                <td><field name="double_yolk_percentage" style="display:inline;"/> <span style="display:inline;">%</span></td>
+                                                <td><field name="double_yolk_cumulative"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td>White</td>
+                                                <td><field name="total_white"/></td>
+                                                <td><field name="white_percentage" style="display:inline;"/> <span style="display:inline;">%</span></td>
+                                                <td><field name="white_cumulative"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Broken</td>
+                                                <td><field name="total_broken"/></td>
+                                                <td><field name="broken_percentage" style="display:inline;"/> <span style="display:inline;">%</span></td>
+                                                <td><field name="broken_cumulative"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Damage</td>
+                                                <td><field name="total_damage"/></td>
+                                                <td><field name="damage_percentage" style="display:inline;"/> <span style="display:inline;">%</span></td>
+                                                <td><field name="damage_cumulative"/></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    </group>
+                             <group string="Overall Summary">
+                               <table class="o_list_table table table-bordered table-sm width=50 mt-4 ">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th class="mt-4">Total Eggs</th>
+                                            <th class="mt-4">Production Percentage</th>
+                                            <th class="mt-4">Cumulative Production</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><field name="total_egg" readonly="1"/></td>
+                                            <td><field name="percentage" style="display:inline;"/> <span style="display:inline;">%</span></td>
+                                            <td><field name="cumulative_egg" readonly="1"/></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </group>
+                        </page>
+
+                         <page string="Miscellaneous">
+                            <group string="Warehouse Setup">
+                                <field name="picking_type_id"/>
+                                <field name="location_id" />
+                                <field name="location_dest_id" />
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_farm_egg_line_tree" model="ir.ui.view">
+        <field name="name">farm.egg.line.list</field>
+        <field name="model">farm.egg.line</field>
+        <field name="arch" type="xml">
+
+            <list editable="bottom">
+                <field name="date"/>
+                <field name="egg_type"/>
+                <field name="value"/>
+                <field name="short_description"/>
+            </list>
+        </field>
+
+    </record>
+
+    <record id="view_farm_egg_line_form" model="ir.ui.view">
+        <field name="name">farm.egg.line.form</field>
+        <field name="model">farm.egg.line</field>
+        <field name="arch" type="xml">
+            <form string="Egg Line">
+                <sheet>20.00
+                    <group>
+                        <field name="production_id"/>
+                        <field name="date"/>
+                        <field name="egg_type"/>
+                        <field name="value"/>
+                        <field name="short_description"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+</odoo>

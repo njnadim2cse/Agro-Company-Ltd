@@ -1,0 +1,29 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_farm_layer_flock,access.farm.layer.flock,model_farm_layer_flock,,1,1,1,1
+access_farm_mortality_details,access.farm.mortality.details,model_farm_mortality_details,,1,1,1,1
+access_farm_production_details,access.farm.production.details,model_farm_production_details,,1,1,1,1
+access_farm_egg_line,farm.egg.line,model_farm_egg_line,base.group_user,1,1,1,1
+access_farm_temperature_user,Farm Temperature User,model_farm_temperature,,1,1,1,1
+access_farm_medicine_temperature_user,farm.medicine.temperature.user,model_farm_medicine_temperature,base.group_user,1,1,1,1
+access_farm_medicine_temperature_line_user,farm.medicine.temperature.line User,model_farm_medicine_temperature_line,base.group_user,1,1,1,1
+access_farm_mortality_breakdown,Access Farm Mortality Breakdown,model_farm_mortality_breakdown,,1,1,1,1
+access_daily_temperature_medicine_line,Access Daily Temperature Medicine Line,model_daily_temperature_medicine_line,,1,1,1,1
+access_feed_details,access.feed.details,model_feed_details,base.group_user,1,1,1,1
+access_farm_water_intake_user,Access Water Intake,model_farm_water_intake,base.group_user,1,1,1,1
+access_egg_inventory_process,Access Egg Inventory Process,model_egg_inventory_process,base.group_user,1,1,1,1
+access_add_medicine_by_live_temperature,Access Add Medicine By Live Temperature,model_add_medicine_by_live_temperature,base.group_user,1,1,1,1
+access_add_medicine_temperature_line,Access Add Medicine Temperature Line,model_add_medicine_temperature_line,base.group_user,1,1,1,1
+access_temperature_details_data,Access Temperature Details Data,model_temperature_details_data,base.group_user,1,1,1,1
+access_suggested_medicine_line,access.suggested.medicine.line,model_suggested_medicine_line,base.group_user,1,1,1,1
+access_add_medicine_by_live_temperature,access.add.medicine.by.live.temperature,model_add_medicine_by_live_temperature,base.group_user,1,1,1,1
+access_add_medicine_temperature_line,access.add.medicine.temperature.line,model_add_medicine_temperature_line,base.group_user,1,1,1,1
+access_farm_boy_request_data,access.farm.boy.request.data,model_farm_boy_request_data,base.group_user,1,1,1,1
+access_farmboy_request_add_line,access.farmboy.request.add.line,model_farmboy_request_add_line,base.group_user,1,1,1,1
+access_flock_body_weight,access.flock.body.weight,model_flock_body_weight,base.group_user,1,1,1,1
+access_weather_data_user,weather.data user,model_weather_data,,1,1,1,1
+access_menual_temperature_entry,access.menual.temperature.entry,model_menual_temperature_entry,base.group_user,1,1,1,1
+access_today_hourly_temperature,access.today.hourly.temperature,model_today_hourly_temperature,base.group_user,1,1,1,1
+access_ventilation_fans_user,Access Ventilation Fans,model_ventilation_fans,base.group_user,1,1,1,1
+access_ventilation_level_user,Access Ventilation Level,model_ventilation_level,base.group_user,1,1,1,1
+access_farm_ventilation_level_line,Access Farm Ventilation Level Line,model_farm_ventilation_level_line,base.group_user,1,1,1,1
+access_ventilation_farm_details,Access Ventilation Farm Details,model_ventilation_farm_details,base.group_user,1,1,1,1

@@ -1,0 +1,21 @@
+.btn-light-red {
+    background-color: #ffe6e6 !important;  /* light red */
+    border-color:  #ff9999  !important;
+    color: #a00000 !important;  ;                /* white text */
+}
+
+.btn-light-red:hover {
+    background-color: #ff5252 !important;  /* slightly darker on hover */
+    border-color: #ff5252 !important;
+}
+
+.btn-light-success {
+    background-color: #e6ffea !important;  /* light green */
+    border-color: #006622 !important;
+    color: #006622 !important;             /* dark green text */
+}
+
+.btn-light-success:hover {
+    background-color: #33cc66 !important;  /* slightly darker on hover */
+    border-color: #33cc66 !important;
+}

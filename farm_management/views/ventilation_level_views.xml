@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_ventilation_level_list" model="ir.ui.view">
+        <field name="name">ventilation.level.list</field>
+        <field name="model">ventilation.level</field>
+        <field name="arch" type="xml">
+            <list string="Ventilation Levels">
+                <field name="reference" width="120"/>
+                <field name="name" width="120" />
+                <field name="created_by" widget="many2one_avatar_user" width="120"/>
+                <field name="state"  widget="badge" decoration-success="state=='done'" decoration-warning="state=='draft'" width="120"/>
+                <field name="description" width="300" readonly="state != 'draft' "/>
+            </list>
+        </field>
+    </record>
+    <record id="view_ventilation_level_form" model="ir.ui.view">
+        <field name="name">ventilation.level.form</field>
+        <field name="model">ventilation.level</field>
+        <field name="arch" type="xml">
+            <form string="Ventilation Level">
+                <header>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+                        <button name="action_confirm" string="Confirm" class="oe_highlight" type="object" icon="fa-check" invisible="state != 'draft'"/>
+                        <button name="action_draft" string="Reset to Draft" type="object" icon="fa-undo" class="btn-secondary" invisible="state != 'done'"/>
+                </header>
+
+                <sheet>
+                    <div>
+                        <h1><field name="reference" readonly="1"/></h1>
+                    </div>
+
+                    <group string="Ventilation Level Details">
+                        <field name="name" placeholder="Enter level name..."/>
+                        <field name="description" placeholder="Enter level description..." widget="html_sanitized"/>
+                    </group>
+                </sheet>
+
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    
+    <record id="action_ventilation_level" model="ir.actions.act_window">
+        <field name="name">Ventilation Levels</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">ventilation.level</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_ventilation_level_list"/>
+    </record>
+
+</odoo>

@@ -1,0 +1,57 @@
+<odoo>
+    <data noupdate="1">
+        <record id="seq_hatchery_egg_batch" model="ir.sequence">
+            <field name="name">Egg Batch</field>
+            <field name="code">hatchery.egg.batch</field>
+            <field name="prefix">BATCH-</field>
+            <field name="padding">3</field>
+            <field name="implementation">standard</field>
+        </record>
+        <record id="seq_hatchery_prestorage_batch" model="ir.sequence">
+            <field name="name">Hatchery Pre-Storage Batch</field>
+            <field name="code">hatchery.prestorage.batch</field>
+            <field name="prefix">PS-</field>
+            <field name="padding">4</field>
+            <field name="implementation">standard</field>
+        </record>
+        <record id="seq_hatchery_setter_stage" model="ir.sequence">
+            <field name="name">Hatchery Setter Stage</field>
+            <field name="code">hatchery.setter.stage</field>
+            <field name="prefix">SETTER/</field>
+            <field name="padding">4</field>
+            <field name="number_increment">1</field>
+        </record>
+        <record id="seq_hatchery_hatcher_stage" model="ir.sequence">
+             <field name="name">Hatchery Hatcher Stage</field>
+             <field name="code">hatchery.hatcher.stage</field>
+             <field name="prefix">HATCHER/</field>
+             <field name="padding">4</field>
+             <field name="number_increment">1</field>
+       </record>
+    <record id="seq_chick_packaging" model="ir.sequence">
+          <field name="name">Chick Packaging</field>
+          <field name="code">chick.packaging</field>
+          <field name="prefix">PACK/</field>
+          <field name="padding">4</field>
+          <field name="implementation">standard</field>
+      </record>
+     <record id="seq_internal_transfer" model="ir.sequence">
+            <field name="name">Internal Transfer Sequence</field>
+            <field name="code">internal.transfer.seq</field>
+            <field name="prefix">TRANS/</field>
+           <field name="padding">4</field>
+           <field name="number_increment">1</field>
+     </record>
+    <record id="seq_chicken_egg_distribution" model="ir.sequence">
+          <field name="name">Chicken Egg Distribution</field>
+          <field name="code">chicken.egg.distribution</field>
+          <field name="prefix">CED/</field>
+          <field name="padding">4</field>
+          <field name="company_id" eval="False"/>
+    </record>
+
+
+
+
+    </data>
+</odoo>

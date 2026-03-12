@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- BOM Form View Extension -->
+    <record id="view_mrp_bom_form_inherit_nutrition" model="ir.ui.view">
+        <field name="name">mrp.bom.form.inherit.nutrition</field>
+        <field name="model">mrp.bom</field>
+        <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
+        <field name="arch" type="xml">
+            
+            <!-- Place nutrition_status and formula_id under product_id -->
+            <xpath expr="//field[@name='product_id']" position="after">
+                <field name="nutrition_status" 
+                       widget="selection_badge" 
+                       readonly="1"/>
+                <field name="formula_id" 
+                       string="Link Formula" />
+            </xpath>
+
+            <!-- Add cost and button to bom line list -->
+            <xpath expr="//field[@name='bom_line_ids']//list" position="inside">
+                <field name="cost" 
+                       readonly="1" />
+                <button name="action_view_nutrients" 
+                        type="object" 
+                        string="Check Nutrients" 
+                        class="btn-secondary" />
+            </xpath>
+            
+            <!-- Add Check Nutrition button -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_check_nutrition" 
+                        type="object" 
+                        string="Check Nutrition" 
+                        class="oe_stat_button" 
+                        icon="fa-flask"
+                        invisible="not formula_id"/>
+            </xpath>
+            
+        </field>
+    </record>
+
+    <record id="view_mrp_bom_line_form_inherit_nutrition" model="ir.ui.view">
+        <field name="name">mrp.bom.line.form.inherit.nutrition</field>
+        <field name="model">mrp.bom.line</field>
+        <field name="inherit_id" ref="mrp.mrp_bom_line_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='product_qty']" position="after">
+                <field name="cost" 
+                       readonly="1" />
+                <field name="ingredient_id" />
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Nutrition Check Wizard Form -->
+    <record id="view_nutrition_check_wizard_form" model="ir.ui.view">
+        <field name="name">nutrition.check.wizard.form</field>
+        <field name="model">nutrition.check.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Nutrition Check Results">
+                <sheet>
+                    <group>
+                        <div class="alert alert-danger" role="alert" invisible="not has_issues">
+                            <h4 class="alert-heading">Nutrition Standards Not Satisfied!</h4>
+                            <p>The following nutrients do not meet the required standards:</p>
+                            <pre><field name="issue_details" readonly="1"/></pre>
+                            <p>Please adjust ingredient quantities in the formula.</p>
+                        </div>
+                        <div class="alert alert-success" role="alert" invisible="has_issues">
+                            <h4 class="alert-heading">All Nutrition Standards Satisfied</h4>
+                            <p>All nutrients meet the required standards. Production can proceed.</p>
+                        </div>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_view_formula" 
+                            string="Adjust Formula" 
+                            type="object" 
+                            class="btn-primary" 
+                            invisible="not has_issues"/>
+                    <button name="action_close" 
+                            string="Close" 
+                            type="object" 
+                            class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

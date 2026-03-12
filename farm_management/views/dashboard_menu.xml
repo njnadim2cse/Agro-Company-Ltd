@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Client action -->
+
+    <record id="action_dashboard_owl" model="ir.actions.client">
+        <field name="name">Dhaka Dashboard</field>
+        <field name="tag">layer_temp_dash.DashboardAction</field>
+        <field name="target">current</field>
+    </record>
+
+
+</odoo>

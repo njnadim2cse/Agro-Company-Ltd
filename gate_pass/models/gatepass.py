@@ -1,5 +1,5 @@
 from odoo import models, fields, api, _
-from odoo.exceptions import UserError, AccessError
+from odoo.exceptions import UserError, AccessError, ValidationError
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -8,13 +8,25 @@ class GatePass(models.Model):
     _name = 'gatepass.gatepass'
     _description = 'Gate Pass Management'
     _inherit = ['mail.thread', 'mail.activity.mixin']
-    
+    _check_company_auto = True
+
+    company_id = fields.Many2one(
+        "res.company",
+        required=True,
+        default=lambda self: self.env.company,
+        index=True  # ← Important for performance
+    )
     # Add computed fields for UI visibility
     user_is_gate_staff = fields.Boolean(string='User is Gate Staff', compute='_compute_user_access')
     user_is_head_office = fields.Boolean(string='User is Head Office', compute='_compute_user_access')
     user_is_security_admin = fields.Boolean(string='User is Security Admin', compute='_compute_user_access')
 
     name = fields.Char(string='Reference', required=True, copy=False, readonly=True, index=True, default=lambda self: _('New'), tracking=True)
+    order_type = fields.Selection([
+        ('sale_order', 'Sale Order'),
+        ('purchase_order', 'Purchase Order')
+    ], string="Order Type", required=True, default='sale_order', tracking=True)
+
     request_type = fields.Selection([
         ('vehicle', 'Vehicle'),
         ('visitor', 'Visitor')
@@ -33,16 +45,15 @@ class GatePass(models.Model):
     
     gate_number = fields.Selection(selection='_get_gate_numbers', string='Gate Number', required=True, tracking=True)
     purpose_id = fields.Many2one('gatepass.purpose.config', string='Purpose', required=True)
-    # purpose = fields.Selection(selection='_get_purposes', string='Purpose', required=True, tracking=True)
     
     people_count = fields.Integer(string='People Count', default=1, tracking=True)
-    notes = fields.Text(string='Notes')
+    notes = fields.Html(string='Notes', sanitize=True, sanitize_tags=False)
     entry_time = fields.Datetime(string='Entry Time')
     exit_time = fields.Datetime(string='Exit Time')
     approval_date = fields.Datetime(string='Approval Date')
     
     # Vehicle-specific fields
-    vehicle_number = fields.Char(string='Vehicle Number', tracking=True)
+    vehicle_number = fields.Char(string='Vehicle Number', tracking=True, required=False)
     vehicle_type = fields.Selection([
         ('truck', 'Truck'),
         ('pickup', 'Pickup'),
@@ -51,8 +62,14 @@ class GatePass(models.Model):
         ('other', 'Other')
     ], string='Vehicle Type', tracking=True)
     
-    # Visitor-specific fields
-    visitor_purpose = fields.Text(string='Visitor Purpose Details')
+    detail_purpose = fields.Html(
+        string="Detail Purpose",
+        sanitize=True,
+        sanitize_tags=False,
+        help="Detailed purpose of the visit"
+    )
+    visitor_audio = fields.Binary("Purpose Audio")
+    audio_filename = fields.Char("Audio Filename")
     
     # Photo fields
     entry_photo = fields.Binary(string='Entry Photo', attachment=True, help="Capture photo using device camera")
@@ -61,8 +78,9 @@ class GatePass(models.Model):
     exit_photo_filename = fields.Char(string='Exit Photo Filename')
     
     # Related documents
-    sale_order_id = fields.Many2one('sale.order', string='Related Sales Order')
-    delivery_order_id = fields.Many2one('stock.picking', string='Related Delivery Order')
+    # sale_order_id = fields.Many2one('sale.order', string='Related Sales Order')
+    # purchase_order_id = fields.Many2one('purchase.order', string='Related Purchase Order')
+    # delivery_order_id = fields.Many2one('stock.picking', string='Related Delivery Order')
     
     # People details (one2many)
     people_ids = fields.One2many('gatepass.people', 'gatepass_id', string='People Details')
@@ -70,13 +88,132 @@ class GatePass(models.Model):
     # Approval
     approved_by = fields.Many2one('res.users', string='Approved By')
     requested_by = fields.Many2one('res.users', string='Requested By', default=lambda self: self.env.user)
-    main_person_id = fields.Many2one(
-        "gatepass.people",
-        string="People",
-        compute="_compute_main_person",
+    
+    main_person_name = fields.Char(
+        string="People Names",
+        compute="_compute_main_person_name",
         store=True
     )
+    
+    # Existing fields
+    sale_order_id = fields.Many2one('sale.order', 
+        string='Related Sales Order',
+        domain="[('id', 'in', available_sale_order_ids)]",
+    )
+    purchase_order_id = fields.Many2one('purchase.order', 
+        string='Related Purchase Order',
+        domain="[('id', 'in', available_purchase_order_ids)]",
+    )
+    partner_id = fields.Many2one('res.partner', string="Customer Name")
+    vendor_id = fields.Many2one('res.partner', string="Vendor Name")
+    order_type = fields.Selection([
+        ('sale_order', 'Sale Order'),
+        ('purchase_order', 'Purchase Order')
+    ], string="Order Type")
+    
+    # Computed fields for domain
+    available_sale_order_ids = fields.Many2many(
+        'sale.order',
+        compute='_compute_available_orders',
+        string='Available Sale Orders'
+    )
+    
+    available_purchase_order_ids = fields.Many2many(
+        'purchase.order',
+        compute='_compute_available_orders',
+        string='Available Purchase Orders'
+    )
+    
+    
+    @api.depends('partner_id', 'vendor_id', 'order_type')
+    def _compute_available_orders(self):
+        """Compute available sale and purchase orders based on conditions"""
+        for record in self:
+            # Initialize as empty
+            record.available_sale_order_ids = False
+            record.available_purchase_order_ids = False
+            
+            if record.order_type == 'sale_order' and record.partner_id:
+                # Get sale orders that match conditions
+                sale_orders = self.env['sale.order'].search([
+                    ('partner_id', '=', record.partner_id.id),
+                    ('state', 'in', ['sale', 'done']),  # Sale order states
+                ])
+                
+                # Filter by picking status
+                filtered_sale_orders = sale_orders.filtered(
+                    lambda so: any(picking.state != 'done' 
+                                 for picking in so.picking_ids)
+                )
+                record.available_sale_order_ids = filtered_sale_orders.ids
+            
+            elif record.order_type == 'purchase_order' and record.vendor_id:
+                # Get purchase orders that match conditions
+                purchase_orders = self.env['purchase.order'].search([
+                    ('partner_id', '=', record.vendor_id.id),
+                    ('state', 'in', ['purchase', 'done']),  # Purchase order states
+                ])
+                
+                # Filter by picking status
+                filtered_purchase_orders = purchase_orders.filtered(
+                    lambda po: any(picking.state != 'done' 
+                                 for picking in po.picking_ids)
+                )
+                record.available_purchase_order_ids = filtered_purchase_orders.ids
 
+
+    def _validate_before_send(self):
+        """
+        Explicit validation called only during state transitions (send/approve).
+        NOT used as @api.constrains to avoid triggering on photo saves, which
+        causes 'Cannot read properties of undefined (reading message)' in Odoo
+        mobile because the JS onSaveError handler receives an unexpected error
+        shape when ValidationError fires on a binary/attachment-only write.
+        """
+        for record in self:
+            # Check if there are people records
+            if not record.people_ids:
+                raise ValidationError(
+                    _('Please add at least one person before proceeding.')
+                )
+
+            # Check if ALL people have mobile numbers
+            people_without_mobile = record.people_ids.filtered(lambda p: not p.mobile)
+            if people_without_mobile:
+                person_names = ', '.join([p.name or 'Unnamed' for p in people_without_mobile])
+                raise ValidationError(
+                    _('All people must have a Mobile Number. Missing mobile number for: %s') % person_names
+                )
+
+            # Only validate for vehicle type requests
+            if record.request_type == 'vehicle':
+                if not record.vehicle_number:
+                    raise ValidationError(
+                        _('Please fill in the *Vehicle Number* before proceeding.')
+                    )
+                if not record.order_type:
+                    raise ValidationError(
+                        _('Please select an *Order Type* before proceeding.')
+                    )
+                if record.order_type == 'sale_order' and not record.partner_id:
+                    raise ValidationError(
+                        _('Please select a *Customer Name* before proceeding.')
+                    )
+                elif record.order_type == 'purchase_order' and not record.vendor_id:
+                    raise ValidationError(
+                        _('Please select a *Vendor Name* before proceeding.')
+                    )
+                if record.order_type == 'sale_order' and not record.sale_order_id:
+                    raise ValidationError(
+                        _('Please select a *Sales Order* before proceeding.')
+                    )
+                elif record.order_type == 'purchase_order' and not record.purchase_order_id:
+                    raise ValidationError(
+                        _('Please select a *Purchase Order* before proceeding.')
+                    )
+                
+                
+    
     # ========== SECURITY METHODS ==========
     def _check_gate_staff_access(self):
         """Check if current user has gate staff access"""
@@ -127,19 +264,26 @@ class GatePass(models.Model):
                 record.user_is_head_office = False
                 record.user_is_security_admin = False
 
+    # FIXED: Only compute the Char field for person names
+    @api.depends('people_ids.name')
+    def _compute_main_person_name(self):
+        """Compute all people names for grouping purposes"""
+        for rec in self:
+            if rec.people_ids:
+                # Get all non-empty names
+                names = [person.name for person in rec.people_ids if person.name]
+                if names:
+                    rec.main_person_name = ', '.join(names)
+                else:
+                    rec.main_person_name = 'Unnamed Persons'
+            else:
+                rec.main_person_name = 'No Person'
+
     def action_send_for_approval(self):
         """Send gate pass for approval - Gate Staff & Admin only"""
         self._check_gate_staff_access()
-        
-        if not self.people_ids:
-            raise UserError(_('Please add people details before sending for approval.'))
-        
-        if self.request_type == 'vehicle' and not self.vehicle_number:
-            raise UserError(_('Please enter vehicle number for vehicle gate pass.'))
-        
-        if self.request_type == 'visitor' and not self.visitor_purpose:
-            raise UserError(_('Please enter visitor purpose details for visitor gate pass.'))
-        
+        self._validate_before_send()
+
         self.write({'state': 'sent'})
         self._send_approval_notification()
         
@@ -299,22 +443,3 @@ class GatePass(models.Model):
         except Exception:
             # If model doesn't exist yet, return empty list
             return []
-
-    @api.onchange('request_type')
-    def _onchange_request_type(self):
-        domain = [('active', '=', True)]
-        if self.request_type == 'vehicle':
-            domain.append(('assign_for', 'in', ['vehicle', 'both']))
-            self.visitor_purpose = False
-            self.purpose_id = False
-        elif self.request_type == 'visitor':
-            domain.append(('assign_for', 'in', ['visitor', 'both']))
-            self.vehicle_number = False
-            self.vehicle_type = False
-            self.purpose_id = False
-        return {'domain': {'purpose_id': domain}}
-    
-    @api.depends("people_ids")
-    def _compute_main_person(self):
-        for rec in self:
-            rec.main_person_id = rec.people_ids[:1].id if rec.people_ids else False

@@ -1,0 +1,99 @@
+/* Farm Medicine Approval Kanban Styling */
+.o_medicine_approval_kanban .ribbon {
+    position: absolute;
+    right: -5px;
+    top: -5px;
+    z-index: 1;
+    overflow: hidden;
+    width: 75px;
+    height: 75px;
+    text-align: right;
+}
+
+.o_medicine_approval_kanban .ribbon span {
+    font-size: 10px;
+    font-weight: bold;
+    color: white;
+    text-transform: uppercase;
+    text-align: center;
+    line-height: 20px;
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+    width: 100px;
+    display: block;
+    background: #79A70A;
+    background: linear-gradient(#F70505 0%, #8F0808 100%);
+    box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1);
+    position: absolute;
+    top: 19px;
+    right: -21px;
+}
+
+.o_medicine_approval_kanban .ribbon span.bg-success {
+    background: linear-gradient(#28a745 0%, #1e7e34 100%);
+}
+
+.o_medicine_approval_kanban .ribbon span.bg-danger {
+    background: linear-gradient(#dc3545 0%, #c82333 100%);
+}
+
+.o_medicine_approval_kanban .ribbon span.bg-warning {
+    background: linear-gradient(#ffc107 0%, #e0a800 100%);
+}
+
+.o_medicine_approval_kanban .ribbon span.bg-info {
+    background: linear-gradient(#17a2b8 0%, #138496 100%);
+}
+
+/* Additional Kanban Styling */
+.o_medicine_approval_kanban .oe_kanban_global_click {
+    position: relative;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 12px;
+    background: white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.o_medicine_approval_kanban .oe_kanban_global_click:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transform: translateY(-2px);
+}
+
+.o_medicine_approval_kanban .o_kanban_header {
+    margin-bottom: 8px;
+    border-bottom: 1px solid #f8f9fa;
+    padding-bottom: 8px;
+}
+
+.o_medicine_approval_kanban .o_kanban_body {
+    min-height: 80px;
+}
+
+.o_medicine_approval_kanban .o_kanban_footer {
+    margin-top: 12px;
+    padding-top: 8px;
+    border-top: 1px solid #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Status specific backgrounds */
+.o_medicine_approval_kanban .bg-warning {
+    background: linear-gradient(#ffc107 0%, #e0a800 100%) !important;
+}
+
+.o_medicine_approval_kanban .bg-success {
+    background: linear-gradient(#28a745 0%, #1e7e34 100%) !important;
+}
+
+.o_medicine_approval_kanban .bg-danger {
+    background: linear-gradient(#dc3545 0%, #c82333 100%) !important;
+}
+
+.o_medicine_approval_kanban .bg-info {
+    background: linear-gradient(#17a2b8 0%, #138496 100%) !important;
+}

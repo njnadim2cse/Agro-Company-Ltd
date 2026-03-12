@@ -1,22 +1,23 @@
-from odoo import models, fields, api
-from odoo.exceptions import AccessError
+from odoo import models, fields, api,_
+from odoo.exceptions import AccessError,UserError
 
 class GateConfig(models.Model):
     _name = 'gatepass.gate.config'
     _description = 'Gate Configuration'
     _order = 'gate_number'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     
-    gate_number = fields.Char(string='Gate Number', required=True)
-    name = fields.Char(string='Gate Name', required=True)
+    gate_number = fields.Char(string='Gate Number', required=True, tracking=True)
+    name = fields.Char(string='Gate Name', required=True, tracking=True)
     location = fields.Selection([
         ('north', 'North'),
         ('south', 'South'), 
         ('east', 'East'),
         ('west', 'West')
-    ], string='Gate Location', required=True)
+    ], string='Gate Location', tracking=True)
 
     gate_incharge_ids = fields.Many2many(
-        'hr.employee', string='Gate Incharge/Staff'
+        'hr.employee', string='Gate Incharge/Staff', tracking=True
     )
 
     active = fields.Boolean(string='Active', default=True)
@@ -56,13 +57,13 @@ class PurposeConfig(models.Model):
     _name = 'gatepass.purpose.config'
     _description = 'Purpose Configuration'
     _order = 'name'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     
-    name = fields.Char(string='Purpose Name', required=True)
+    name = fields.Char(string='Purpose Name', required=True, tracking=True)
     assign_for = fields.Selection([
         ('vehicle', 'Vehicle'),
-        ('visitor', 'Visitor'),
-        ('both', 'Both')
-    ], string='Type', required=True, default='both')
+        ('visitor', 'Visitor')
+    ], string='Type', required=True, tracking=True)
     active = fields.Boolean(string='Active', default=True)
     
     _sql_constraints = [
@@ -87,3 +88,7 @@ class PurposeConfig(models.Model):
     def create(self, vals):
         self.check_config_access()
         return super().create(vals)
+
+
+
+

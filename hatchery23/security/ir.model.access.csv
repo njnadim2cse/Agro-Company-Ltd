@@ -1,0 +1,33 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hatchery_egg_batch,Hatchery.Egg.Batch,model_hatchery_egg_batch,base.group_user,1,1,1,1
+access_hatchery_egg_selection,Hatchery.Egg.Selection,model_hatchery_egg_selection,base.group_user,1,1,1,1
+access_hatchery_egg_equipment,Hatchery.Egg.Equipment,model_hatchery_egg_equipment,base.group_user,1,1,1,1
+access_hatchery_egg_material,Hatchery.Egg.Material,model_hatchery_egg_material,base.group_user,1,1,1,1
+access_hatchery_egg_temperature,Hatchery.Egg.Temperature,model_hatchery_egg_temperature,base.group_user,1,1,1,1
+access_hatchery_egg_sanitizer,Hatchery.Egg.Sanitizer,model_hatchery_egg_sanitizer,base.group_user,1,1,1,1
+access_hatchery_setter_machine,Hatchery.Setter.Machine,model_hatchery_setter_machine,base.group_user,1,1,1,1
+access_hatchery_setter_stage,Hatchery.Setter.Stage,model_hatchery_setter_stage,base.group_user,1,1,1,1
+access_hatchery_setter_equipment,Hatchery.Setter.Equipment,model_hatchery_setter_stage_equipment,base.group_user,1,1,1,1
+access_hatchery_setter_material,Hatchery.Setter.Material,model_hatchery_setter_stage_material,base.group_user,1,1,1,1
+access_hatchery_setter_temperature,Hatchery.Setter.Temperature,model_hatchery_setter_stage_temperature,base.group_user,1,1,1,1
+access_hatchery_setter_sanitizer,Hatchery.Setter.Sanitizer,model_hatchery_setter_stage_sanitizer,base.group_user,1,1,1,1
+access_hatchery_hatcher_machine,Hatchery.Hatcher.Machine,model_hatchery_hatcher_machine,base.group_user,1,1,1,1
+access_hatchery_hatcher_stage,Hatchery.Hatcher.Stage,model_hatchery_hatcher_stage,base.group_user,1,1,1,1
+access_hatchery_hatcher_equipment,Hatchery.Hatcher.Equipment,model_hatchery_hatcher_stage_equipment,base.group_user,1,1,1,1
+access_hatchery_hatcher_material,Hatchery.Hatcher.Material,model_hatchery_hatcher_stage_material,base.group_user,1,1,1,1
+access_hatchery_hatcher_temperature,Hatchery.Hatcher.Temperature,model_hatchery_hatcher_stage_temperature,base.group_user,1,1,1,1
+access_hatchery_hatcher_sanitizer,Hatchery.Hatcher.Sanitizer,model_hatchery_hatcher_stage_sanitizer,base.group_user,1,1,1,1
+access_chick_packaging,Chick Packaging,model_chick_packaging,base.group_user,1,1,1,1
+access_internal_transfer,Internal Transfer,model_internal_transfer,base.group_user,1,1,1,1
+access_hatchery_prestorage_batch,hatchery.prestorage.batch,model_hatchery_prestorage_batch,,1,1,1,1
+access_prestorage_break_history_user,access.prestorage.break.history.user,model_hatchery_prestorage_break_history,base.group_user,1,1,1,1
+access_prestorage_break_history_manager,access.prestorage.break.history.manager,model_hatchery_prestorage_break_history,base.group_system,1,1,1,1
+access_hatchery_egg_selection_user,Hatchery Egg Selection,model_hatchery_egg_selection,base.group_user,1,1,1,0
+access_setter_machine_manager,access.setter.machine.manager,model_hatchery_setter_machine,base.group_user,1,1,1,1
+access_setter_stage_rack_manager,access.setter.stage.rack.manager,model_hatchery_setter_stage_rack,base.group_user,1,1,1,1
+access_egg_batch_break_history_user,access.egg.batch.break.history.user,model_hatchery_egg_batch_break_history,base.group_user,1,1,1,1
+access_egg_batch_break_history_manager,access.egg.batch.break.history.manager,model_hatchery_egg_batch_break_history,base.group_system,,1,1,1,1
+access_setter_break_history,access_setter_break_history,model_hatchery_setter_break_history,,1,1,1,1
+access_hatcher_break_history,hatcher.break.history,model_hatchery_hatcher_break_history,,1,1,1,1
+access_chicken_egg_distribution_user,chicken.egg.distribution_user,model_chicken_egg_distribution,base.group_user,1,1,1,1
+access_chicken_egg_distribution_line_user,chicken.egg.distribution.line_user,model_chicken_egg_distribution_line,base.group_user,1,1,1,1

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mrp_bom_form_extended" model="ir.ui.view">
+        <field name="name">mrp.bom.form.extended</field>
+        <field name="model">mrp.bom</field>
+        <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='bom_line_ids']" position="after">
+                <div style="
+                    display: table;
+                    width: 100%;
+                    background-color: #f8f9fa;
+                    border: 1px solid #dee2e6;
+                    border-radius: 4px;
+                    margin: 10px 0;
+                    padding: 10px;
+                ">
+                    <div style="display: table-row;">
+                        <div style="
+                            display: table-cell;
+                            text-align: left;
+                            padding-right: 15px;
+                            font-weight: bold;
+                            color: #000;
+                            white-space: nowrap;
+                        ">
+                            TOTAL QUANTITY
+                        </div>
+                        <div style="
+                            display: table-cell;
+                            text-align: right;
+                            width: 100px;
+                        ">
+                            <field name="total_bom_quantity" 
+                                   widget="float" 
+                                   nolabel="1" 
+                                   style="
+                                       border: none;
+                                       background: transparent;
+                                       font-weight: bold;
+                                       font-size: 16px;
+                                       color: #000;
+                                       text-align: right;
+                                       width: 100%;
+                                   "/>
+                        </div>
+                        <div style="
+                            display: table-cell;
+                            text-align: left;
+                            padding-left: 10px;
+                            font-weight: bold;
+                            color: #000;
+                        ">
+                            KG
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

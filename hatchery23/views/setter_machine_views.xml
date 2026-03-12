@@ -1,0 +1,30 @@
+<odoo>
+  
+    <record id="view_setter_machine_form_only" model="ir.ui.view">
+        <field name="name">setter.machine.form.only</field>
+        <field name="model">hatchery.setter.machine</field>
+        <field name="arch" type="xml">
+            <form string="Setter Machine">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="capacity"/>
+                        <field name="egg_batch_id"/>
+                        <field name="available_qty" readonly="1"/>
+                    </group>
+
+                    <notebook>
+                        <page string="Racks">
+                            <field name="rack_ids">
+                                <list>
+                                    <field name="rack_no"/>
+                                    <field name="qty"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

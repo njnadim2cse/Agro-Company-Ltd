@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+   <record id="view_product_template_form_inherit_medicine" model="ir.ui.view">
+        <field name="name">product.template.form.data</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='categ_id']" position="after">
+                <field name="is_medicine"/>
+                <field name="is_feed"/>
+                <field name="egg_type"/>
+            </xpath>
+         </field>
+    </record>
+    
+    <record id="view_stock_picking_type_form_inherit_egg" model="ir.ui.view">
+        <field name="name">stock.picking.type.form.inherit.egg</field>
+        <field name="model">stock.picking.type</field>
+        <field name="inherit_id" ref="stock.view_picking_type_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='code']" position="after">
+                <field name="is_for_production_egg"/>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

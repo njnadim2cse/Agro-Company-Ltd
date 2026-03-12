@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+     <!-- Ingredient List View -->
+    <record id="view_feed_ingredient_list" model="ir.ui.view">
+        <field name="name">feed.ingredient.list</field>
+        <field name="model">feed.ingredient</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="ingredient_type"/>
+                <field name="unit_cost"/>
+                <field name="uom_id"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Ingredient Form View -->
+    <record id="view_feed_ingredient_form" model="ir.ui.view">
+        <field name="name">feed.ingredient.form</field>
+        <field name="model">feed.ingredient</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="product_id"/>
+                            <field name="code"/>
+                            <field name="ingredient_type"/>
+                        </group>
+                        <group>
+                            <field name="unit_cost"/>
+                            <field name="uom_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Nutrients">
+                            <field name="nutrient_line_ids">
+                                <list editable="bottom">
+                                    <field name="nutrition_id" width="150"/>
+                                    <field name="percentage_per_100kg" width="150"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Extra Nutrients">
+                            <field name="extra_nutrients" widget="html"/>
+                        </page>
+                        <page string="Remarks">
+                            <field name="remarks" widget="html"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Ingredient Action -->
+    <record id="action_feed_ingredient" model="ir.actions.act_window">
+        <field name="name">Ingredients</field>
+        <field name="res_model">feed.ingredient</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

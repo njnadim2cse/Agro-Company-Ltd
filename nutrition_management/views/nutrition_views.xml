@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Nutrition List View -->
+    <record id="view_feed_nutrition_list" model="ir.ui.view">
+        <field name="name">feed.nutrition.list</field>
+        <field name="model">feed.nutrition</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="sname"/>
+                <field name="nutrient_type"/>
+                <field name="uom_id"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Nutrition Form View -->
+    <record id="view_feed_nutrition_form" model="ir.ui.view">
+        <field name="name">feed.nutrition.form</field>
+        <field name="model">feed.nutrition</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="sname"/>
+                        <field name="nutrient_type"/>
+                        <field name="uom_id"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Nutrition Action -->
+    <record id="action_feed_nutrition" model="ir.actions.act_window">
+        <field name="name">Nutritions</field>
+        <field name="res_model">feed.nutrition</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>
